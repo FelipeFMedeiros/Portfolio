@@ -1,14 +1,21 @@
-import { Button } from "@/components/ui/button"
+import Header from '@/components/layout/Header';
+import Hero from '@/components/sections/Hero';
 
 function App() {
     return (
-        <>
-            <div>
-                <h1 className="text-3xl">Testando shadcn/ui</h1>
-                <p className="text-black">Apenas um teste</p>
-                <Button className="bg-blue-500 text-white hover:bg-blue-600">Click me</Button>
-            </div>
-        </>
+        <div className="min-h-screen bg-background text-foreground">
+            <Header />
+            <main>
+                <Hero />
+
+                <section id="sobre" className="min-h-32" />
+                <section id="educacao" className="min-h-32" />
+                <section id="experiencia" className="min-h-32" />
+                <section id="habilidades" className="min-h-32" />
+                <section id="projetos" className="min-h-32" />
+                <section id="contato" className="min-h-32" />
+            </main>
+        </div>
     );
 }
 
