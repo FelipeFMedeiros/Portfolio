@@ -100,7 +100,7 @@ export default function Hero() {
                             Ver Projetos
                             <ArrowRight size={16} />
                         </Button>
-                        <Button size="lg" variant="outline" asChild className="gap-2 font-semibold">
+                        <Button size="lg" variant="outline" asChild className="gap-2 font-semibold hover:text-white hover:border-white">
                             <a href="/Felipe_Medeiros_CV.pdf" download="Felipe_Medeiros_CV.pdf">
                                 <Download size={16} />
                                 Download CV
