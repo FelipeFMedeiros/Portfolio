@@ -2,6 +2,8 @@ import Header from '@/components/layout/Header';
 import Hero from '@/components/sections/Hero';
 import About from '@/components/sections/About';
 import Education from '@/components/sections/Education';
+import Experience from '@/components/sections/Experience';
+import Skills from '@/components/sections/Skills';
 import MouseGlow from '@/components/ui/MouseGlow';
 
 function App() {
@@ -13,8 +15,8 @@ function App() {
                 <Hero />
                 <About />
                 <Education />
-                <section id="experiencia" className="min-h-32" />
-                <section id="habilidades" className="min-h-32" />
+                <Experience />
+                <Skills />
                 <section id="projetos" className="min-h-32" />
                 <section id="contato" className="min-h-32" />
             </main>
