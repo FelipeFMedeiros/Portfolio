@@ -1,27 +1,16 @@
-import Header from '@/components/layout/Header';
-import Hero from '@/components/sections/Hero';
-import About from '@/components/sections/About';
-import Education from '@/components/sections/Education';
-import Experience from '@/components/sections/Experience';
-import Skills from '@/components/sections/Skills';
-import MouseGlow from '@/components/ui/MouseGlow';
+import { Routes, Route } from 'react-router-dom';
+import ScrollToTop from '@/components/ScrollToTop';
+import Portfolio from '@/pages/Portfolio';
+import ProjectDetail from '@/pages/ProjectDetail';
 
-function App() {
+export default function App() {
     return (
-        <div className="min-h-screen bg-background text-foreground">
-            <MouseGlow />
-            <Header />
-            <main>
-                <Hero />
-                <About />
-                <Education />
-                <Experience />
-                <Skills />
-                <section id="projetos" className="min-h-32" />
-                <section id="contato" className="min-h-32" />
-            </main>
-        </div>
+        <>
+            <ScrollToTop />
+            <Routes>
+                <Route path="/" element={<Portfolio />} />
+                <Route path="/projects/:slug" element={<ProjectDetail />} />
+            </Routes>
+        </>
     );
 }
-
-export default App;

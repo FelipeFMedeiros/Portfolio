@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 const NAV_LINKS = [
@@ -16,6 +17,8 @@ export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
+    const location = useLocation();
+    const isHome = location.pathname === '/';
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 40);
@@ -45,6 +48,11 @@ export default function Header() {
 
     const handleNavClick = (href: string) => {
         setMobileOpen(false);
+        if (!isHome) {
+            // Navigate to home page then scroll to section
+            window.location.href = '/' + href;
+            return;
+        }
         const id = href.slice(1);
         document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -66,7 +74,13 @@ export default function Header() {
                     )}
                 >
                     <button
-                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        onClick={() => {
+                            if (!isHome) {
+                                window.location.href = '/';
+                            } else {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
+                        }}
                         className="flex items-center gap-2 mr-1 group cursor-pointer"
                         aria-label="Topo"
                     >
