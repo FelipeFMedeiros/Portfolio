@@ -121,16 +121,16 @@ export default function About() {
                             Olá! Sou Felipe, estudante de Ciência da Computação na{' '}
                             <span className="text-foreground font-medium">UERN</span> (atualmente no 7º período) e desenvolvedor
                             Full-Stack. Comecei a programar durante a graduação e logo mergulhei em
-                            projetos reais — sistemas que impactaram mais de{' '}
+                            projetos reais, trabalhei em sistemas que impactaram mais de{' '}
                             <span className="text-foreground font-medium">20 mil alunos</span>, apps
-                            mobile publicados na App Store e Play Store, e soluções web que
+                            mobile publicados na App Store e Play Store e soluções web que
                             impulsionaram o crescimento de empresas.
                         </motion.p>
                         <motion.p variants={fadeUp}>
                             Tenho visão completa do desenvolvimento: da modelagem de banco de dados e
                             construção de APIs robustas com{' '}
                             <span className="text-foreground font-medium">Node.js e C# .NET</span>,
-                            até interfaces React responsivas e aplicativos multiplataforma com{' '}
+                            até interfaces responsivas com React ou Angular, além de aplicativos multiplataforma com{' '}
                             <span className="text-foreground font-medium">Expo</span>. Priorizo código
                             limpo, arquiteturas bem fundamentadas e soluções que equilibram
                             performance e experiência do usuário.
@@ -141,7 +141,10 @@ export default function About() {
                             professor voluntário em três projetos de extensão da UERN — ensinando
                             programação a crianças, IoT com Arduino a jovens e inclusão digital a
                             comunidades periféricas. Acredito que compartilhar conhecimento transforma
-                            tanto quanto construir software.
+                            tanto quanto construir software. Também participo de projetos de pesquisa acadêmica, 
+                            explorando temas como algoritmos de aprendizado de máquina e otimização de sistemas distribuídos.
+                             Estou sempre em busca de novos desafios que me permitam crescer como desenvolvedor e impactar 
+                             positivamente a vida das pessoas através da tecnologia. 
                         </motion.p>
                     </motion.div>
 

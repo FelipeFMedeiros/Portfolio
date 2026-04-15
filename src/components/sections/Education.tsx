@@ -16,6 +16,7 @@ const DISCIPLINES = [
     'Sistemas Embarcados',
     'Programação Orientada a Objetos',
     'Técnicas de Programação',
+    'Processamento de Imagens e Visão Computacional',
 ] as const;
 
 interface Certificate {
@@ -28,35 +29,45 @@ interface Certificate {
 
 const CERTIFICATES: Certificate[] = [
     {
-        title: 'Título do Certificado 1',
-        issuer: 'Nome da Plataforma',
-        date: 'Jan 2024',
-        credentialUrl: '#',
-        // imageUrl: '/certs/cert1.jpg',
+        title: 'NLW Operator - Fullstack',
+        issuer: 'Rocketseat',
+        date: 'Mar 2026',
+        credentialUrl: 'https://app.rocketseat.com.br/certificates/f77fed0d-9554-41e6-837b-4889b2ab3bed',
+        imageUrl: '/certs/Certificate_NLW_Operator_Fullstack.png',
     },
     {
-        title: 'Título do Certificado 2',
-        issuer: 'Nome da Plataforma',
-        date: 'Mar 2024',
-        credentialUrl: '#',
+        title: 'Neural Mechanisms of Cognitive Function Meeting',
+        issuer: 'Santos Dumont Institute - Science and Education',
+        date: 'Apr 2025',
+        imageUrl: '/certs/certificado_Felipe_Freitas_de_Medeiros.png',
     },
     {
-        title: 'Título do Certificado 3',
-        issuer: 'Nome da Plataforma',
-        date: 'Jun 2024',
-        credentialUrl: '#',
+        title: 'Complete React v9',
+        issuer: 'Frontend Masters',
+        date: 'Mar 2025',
+        credentialUrl: 'https://static.frontendmasters.com/ud/c/44c0ee8b71/hixpadIGiV/complete-react-v9.pdf',
+        imageUrl: '/certs/complete-react-v9.png',
     },
     {
-        title: 'Título do Certificado 4',
-        issuer: 'Nome da Plataforma',
-        date: 'Set 2024',
-        credentialUrl: '#',
+        title: 'React and TypeScript, v2',
+        issuer: 'Frontend Masters',
+        date: 'Mar 2025',
+        credentialUrl: 'https://static.frontendmasters.com/ud/c/44c0ee8b71/XgkBlJxZQC/react-typescript-v2.pdf',
+        imageUrl: '/certs/react-typescript-v2.png',
     },
     {
-        title: 'Título do Certificado 5',
-        issuer: 'Nome da Plataforma',
-        date: 'Nov 2024',
-        credentialUrl: '#',
+        title: 'The Origins III: JavaScript',
+        issuer: 'Codédex',
+        date: 'Feb 2025',
+        credentialUrl: 'https://www.codedex.io/certificates/0f89352f-aa64-401c-a283-a90b98abc379',
+        imageUrl: '/certs/The_Origins III_JavaScript.png',
+    },
+    {
+        title: 'Everything Git',
+        issuer: 'Frontend Masters',
+        date: 'Jan 2025',
+        credentialUrl: 'https://static.frontendmasters.com/ud/c/44c0ee8b71/tNgMJoASup/everything-git.pdf',
+        imageUrl: '/certs/everything-git.png',
     },
 ];
 
@@ -238,13 +249,15 @@ export default function Education() {
                                 className="snap-start shrink-0 w-72 bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 group flex flex-col"
                             >
                                 {/* Visual header */}
-                                <div className="h-36 bg-linear-to-br from-primary/15 via-primary/5 to-secondary relative overflow-hidden flex items-center justify-center">
+                                <div className="h-45 bg-linear-to-br from-primary/15 via-primary/5 to-secondary relative overflow-hidden flex items-center justify-center">
                                     {cert.imageUrl ? (
-                                        <img
-                                            src={cert.imageUrl}
-                                            alt={cert.title}
-                                            className="w-full h-full object-cover"
-                                        />
+                                        <a href={cert.credentialUrl} target='_blank'>
+                                            <img
+                                                src={cert.imageUrl}
+                                                alt={cert.title}
+                                                className="w-full h-full object-cover"
+                                                />
+                                        </a>
                                     ) : (
                                         <Award
                                             size={44}
