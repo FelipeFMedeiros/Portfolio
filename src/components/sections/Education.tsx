@@ -39,6 +39,7 @@ const CERTIFICATES: Certificate[] = [
         title: 'Neural Mechanisms of Cognitive Function Meeting',
         issuer: 'Santos Dumont Institute - Science and Education',
         date: 'Apr 2025',
+        credentialUrl: '/certs/certificado_Felipe_Freitas_de_Medeiros_Neural.pdf',
         imageUrl: '/certs/certificado_Felipe_Freitas_de_Medeiros.png',
     },
     {
@@ -90,14 +91,17 @@ export default function Education() {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
+    const [scrollProgress, setScrollProgress] = useState(0);
 
     useEffect(() => {
         const el = scrollRef.current;
         if (!el) return;
 
         const update = () => {
+            const maxScroll = el.scrollWidth - el.clientWidth;
             setCanScrollLeft(el.scrollLeft > 4);
-            setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
+            setCanScrollRight(el.scrollLeft < maxScroll - 4);
+            setScrollProgress(maxScroll > 0 ? (el.scrollLeft / maxScroll) * 100 : 0);
         };
 
         update();
@@ -292,6 +296,16 @@ export default function Education() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+
+                    {/* Scroll Progress Bar Minimalista */}
+                    <div className="mt-8 mx-auto max-w-md h-1 bg-border/40 rounded-full overflow-hidden">
+                        <motion.div
+                            className="h-full bg-primary"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${scrollProgress}%` }}
+                            transition={{ ease: 'easeOut', duration: 0.1 }}
+                        />
                     </div>
                 </motion.div>
             </div>

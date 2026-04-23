@@ -6,6 +6,7 @@ import Education from '@/components/sections/Education';
 import Experience from '@/components/sections/Experience';
 import Skills from '@/components/sections/Skills';
 import Projects from '@/components/sections/Projects';
+import Contact from '@/components/sections/Contact';
 import MouseGlow from '@/components/ui/MouseGlow';
 
 export default function Portfolio() {
@@ -31,7 +32,7 @@ export default function Portfolio() {
                 <Experience />
                 <Skills />
                 <Projects />
-                <section id="contato" className="min-h-32" />
+                <Contact />
             </main>
         </div>
     );

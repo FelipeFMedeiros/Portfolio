@@ -21,7 +21,13 @@ export default function Header() {
     const isHome = location.pathname === '/';
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 40);
+        const onScroll = () => {
+            setScrolled(window.scrollY > 40);
+            
+            if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
+                setActiveSection('contato');
+            }
+        };
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
