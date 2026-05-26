@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const NAV_LINKS = [
     { label: 'Sobre', href: '#sobre' },
@@ -19,6 +20,7 @@ export default function Header() {
     const [activeSection, setActiveSection] = useState('');
     const location = useLocation();
     const isHome = location.pathname === '/';
+    const { theme, setTheme } = useTheme();
 
     useEffect(() => {
         const onScroll = () => {
@@ -150,39 +152,107 @@ export default function Header() {
                                     </button>
                                 );
                             })}
+
+                            {/* Theme Toggle Button Desktop */}
+                            <button
+                                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                className="ml-2 flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary/60 cursor-pointer transition-colors"
+                                aria-label="Alternar tema"
+                            >
+                                <AnimatePresence mode="wait" initial={false}>
+                                    {theme === 'dark' ? (
+                                        <motion.span
+                                            key="sun"
+                                            initial={{ rotate: -90, opacity: 0 }}
+                                            animate={{ rotate: 0, opacity: 1 }}
+                                            exit={{ rotate: 90, opacity: 0 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="block"
+                                        >
+                                            <Sun size={17} />
+                                        </motion.span>
+                                    ) : (
+                                        <motion.span
+                                            key="moon"
+                                            initial={{ rotate: 90, opacity: 0 }}
+                                            animate={{ rotate: 0, opacity: 1 }}
+                                            exit={{ rotate: -90, opacity: 0 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="block"
+                                        >
+                                            <Moon size={17} />
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
+                            </button>
                         </nav>
 
-                        <button
-                            className="md:hidden p-1.5 rounded-lg text-foreground hover:bg-secondary/60 transition-colors cursor-pointer relative z-50"
-                            onClick={() => setMobileOpen((v) => !v)}
-                            aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
-                        >
-                            <AnimatePresence mode="wait" initial={false}>
-                                {mobileOpen ? (
-                                    <motion.span
-                                        key="x"
-                                        initial={{ rotate: -90, opacity: 0 }}
-                                        animate={{ rotate: 0, opacity: 1 }}
-                                        exit={{ rotate: 90, opacity: 0 }}
-                                        transition={{ duration: 0.15 }}
-                                        className="block"
-                                    >
-                                        <X size={24} />
-                                    </motion.span>
-                                ) : (
-                                    <motion.span
-                                        key="menu"
-                                        initial={{ rotate: 90, opacity: 0 }}
-                                        animate={{ rotate: 0, opacity: 1 }}
-                                        exit={{ rotate: -90, opacity: 0 }}
-                                        transition={{ duration: 0.15 }}
-                                        className="block"
-                                    >
-                                        <Menu size={24} />
-                                    </motion.span>
-                                )}
-                            </AnimatePresence>
-                        </button>
+                        <div className="flex md:hidden items-center gap-1">
+                            {/* Theme Toggle Button Mobile */}
+                            <button
+                                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                className="flex h-9 w-9 items-center justify-center rounded-lg text-foreground hover:bg-secondary/60 cursor-pointer transition-colors relative z-50 mr-1"
+                                aria-label="Alternar tema"
+                            >
+                                <AnimatePresence mode="wait" initial={false}>
+                                    {theme === 'dark' ? (
+                                        <motion.span
+                                            key="sun"
+                                            initial={{ rotate: -90, opacity: 0 }}
+                                            animate={{ rotate: 0, opacity: 1 }}
+                                            exit={{ rotate: 90, opacity: 0 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="block"
+                                        >
+                                            <Sun size={20} />
+                                        </motion.span>
+                                    ) : (
+                                        <motion.span
+                                            key="moon"
+                                            initial={{ rotate: 90, opacity: 0 }}
+                                            animate={{ rotate: 0, opacity: 1 }}
+                                            exit={{ rotate: -90, opacity: 0 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="block"
+                                        >
+                                            <Moon size={20} />
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
+                            </button>
+
+                            <button
+                                className="p-1.5 rounded-lg text-foreground hover:bg-secondary/60 transition-colors cursor-pointer relative z-50"
+                                onClick={() => setMobileOpen((v) => !v)}
+                                aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
+                            >
+                                <AnimatePresence mode="wait" initial={false}>
+                                    {mobileOpen ? (
+                                        <motion.span
+                                            key="x"
+                                            initial={{ rotate: -90, opacity: 0 }}
+                                            animate={{ rotate: 0, opacity: 1 }}
+                                            exit={{ rotate: 90, opacity: 0 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="block"
+                                        >
+                                            <X size={24} />
+                                        </motion.span>
+                                    ) : (
+                                        <motion.span
+                                            key="menu"
+                                            initial={{ rotate: 90, opacity: 0 }}
+                                            animate={{ rotate: 0, opacity: 1 }}
+                                            exit={{ rotate: -90, opacity: 0 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="block"
+                                        >
+                                            <Menu size={24} />
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </motion.header>
