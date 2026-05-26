@@ -141,7 +141,7 @@ const STACK: readonly StackCategory[] = [
 const CX          = 250;
 const CY          = 250;
 const MAX_R       = 130;
-const LABEL_R     = 178;
+const LABEL_R     = 188;
 const N           = RADAR_SKILLS.length;
 const LINE_H      = 15;   // px between label lines
 const RINGS       = [0.25, 0.5, 0.75, 1.0] as const;
@@ -255,13 +255,9 @@ function RadarChart({ isInView }: { isInView: boolean }) {
                     key={i}
                     cx={coord.x}
                     cy={coord.y}
-                    r={hovered === i ? 6.5 : 4.5}
-                    fill={hovered === i
-                        ? 'oklch(0.76 0.15 207)'
-                        : 'oklch(0.76 0.15 207 / 0.85)'}
-                    stroke="oklch(0.09 0.01 264)"
-                    strokeWidth={2}
-                    className="cursor-pointer transition-all duration-150"
+                    r={5.5}
+                    strokeWidth={8}
+                    className="fill-primary stroke-transparent hover:stroke-primary/30 transition-all duration-200 cursor-crosshair"
                     initial={{ opacity: 0, scale: 0 }}
                     animate={isInView ? { opacity: 1, scale: 1 } : {}}
                     transition={{ delay: 0.55 + i * 0.07, duration: 0.3 }}
@@ -314,7 +310,7 @@ function RadarChart({ isInView }: { isInView: boolean }) {
                         key={i}
                         textAnchor={anchor}
                         fill="oklch(0.78 0.01 264)"
-                        fontSize="12.5"
+                        className="text-[13.5px]"
                         fontWeight="500"
                         fontFamily="Inter, sans-serif"
                     >
