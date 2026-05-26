@@ -4,28 +4,28 @@ import type { Variants } from 'framer-motion';
 import { Code2, GraduationCap, Rocket } from 'lucide-react';
 
 const STATS = [
-    { value: '20k+', label: 'Alunos impactados' },
-    { value: '+2', label: 'Anos de experiência' },
+    { value: '20k+', label: 'Vidas impactadas' },
+    { value: '+2', label: 'Anos construindo software' },
 ] as const;
 
 const HIGHLIGHTS = [
     {
         icon: Code2,
-        title: 'Código Limpo',
+        title: 'Arquitetura & Performance',
         description:
-            'Arquiteturas bem fundamentadas, código legível e manutenível em cada projeto — do backend ao mobile.',
+            'Foco em aplicações rápidas e otimizadas, reduzindo payloads e garantindo 100/100 no Lighthouse.',
     },
     {
         icon: GraduationCap,
-        title: 'Ensino & Mentoria',
+        title: 'Fundamentos Sólidos',
         description:
-            'Professor em 3 projetos de extensão da UERN e monitor acadêmico de Técnicas de Programação.',
+            'De jovem aprendiz no hardware à monitoria em C, priorizo entender a computação em baixo nível.',
     },
     {
         icon: Rocket,
-        title: 'Impacto Real',
+        title: 'Ecossistemas Escaláveis',
         description:
-            'Soluções que alcançaram mais de 20 mil pessoas — de alunos a comunidades periféricas.',
+            'Desenvolvimento Full-Stack que suporta alto volume, como plataformas rodando para mais de 20 mil usuários.',
     },
 ] as const;
 
@@ -118,33 +118,13 @@ export default function About() {
                         className="flex flex-col gap-5 text-muted-foreground leading-relaxed text-[0.965rem]"
                     >
                         <motion.p variants={fadeUp}>
-                            Olá! Sou Felipe, estudante de Ciência da Computação na{' '}
-                            <span className="text-foreground font-medium">UERN</span> (atualmente no 7º período) e desenvolvedor
-                            Full-Stack. Comecei a programar durante a graduação e logo mergulhei em
-                            projetos reais, trabalhei em sistemas que impactaram mais de{' '}
-                            <span className="text-foreground font-medium">20 mil alunos</span>, apps
-                            mobile publicados na App Store e Play Store e soluções web que
-                            impulsionaram o crescimento de empresas.
+                            Olá! Sou Felipe, estudante de Ciência da Computação na <span className="text-foreground font-medium">UERN</span> e desenvolvedor Full-Stack. Minha história com a tecnologia não começou no código, mas abrindo máquinas. Comecei como <span className="text-foreground font-medium">jovem aprendiz na manutenção de computadores e notebooks</span>, o que me deu uma base prática e curiosidade para entender como a computação funciona desde o hardware.
                         </motion.p>
                         <motion.p variants={fadeUp}>
-                            Tenho visão completa do desenvolvimento: da modelagem de banco de dados e
-                            construção de APIs robustas com{' '}
-                            <span className="text-foreground font-medium">Node.js e C# .NET</span>,
-                            até interfaces responsivas com React ou Angular, além de aplicativos multiplataforma com{' '}
-                            <span className="text-foreground font-medium">Expo</span>. Priorizo código
-                            limpo, arquiteturas bem fundamentadas e soluções que equilibram
-                            performance e experiência do usuário.
+                            Hoje, traduzo essa mesma curiosidade para o desenvolvimento de software. Tenho visão completa do ciclo de vida de uma aplicação: da modelagem de bancos de dados robustos e APIs com <span className="text-foreground font-medium">Node.js e C# .NET</span>, à construção de interfaces de alta performance e apps nativos com <span className="text-foreground font-medium">React Native</span>. Trabalho focado em criar sistemas que equilibram arquitetura limpa e métricas reais de negócio.
                         </motion.p>
                         <motion.p variants={fadeUp}>
-                            Além da engenharia, tenho uma forte ligação com{' '}
-                            <span className="text-foreground font-medium">ensino</span>. Atuei como
-                            professor voluntário em três projetos de extensão da UERN — ensinando
-                            programação a crianças, IoT com Arduino a jovens e inclusão digital a
-                            comunidades periféricas. Acredito que compartilhar conhecimento transforma
-                            tanto quanto construir software. Também participo de projetos de pesquisa acadêmica, 
-                            explorando temas como algoritmos de aprendizado de máquina e otimização de sistemas distribuídos.
-                             Estou sempre em busca de novos desafios que me permitam crescer como desenvolvedor e impactar 
-                             positivamente a vida das pessoas através da tecnologia. 
+                            Acredito que dominar a base é fundamental. Por isso, atuei como monitor acadêmico ensinando a <span className="text-foreground font-medium">linguagem C e alocação de memória</span>, e participo de projetos de extensão levando tecnologia para a comunidade. Já desenvolvi plataformas que impactaram diretamente mais de <span className="text-foreground font-medium">20 mil pessoas</span>, provando que um bom software vai muito além de telas bonitas, ele resolve problemas em escala.
                         </motion.p>
                     </motion.div>
 
