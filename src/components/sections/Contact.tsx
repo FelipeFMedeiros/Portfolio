@@ -26,7 +26,11 @@ export default function Contact() {
     };
 
     return (
-        <section ref={sectionRef} id="contato" className="relative py-32 overflow-hidden flex items-center justify-center min-h-[50vh]">
+        <section
+            ref={sectionRef}
+            id="contato"
+            className="relative py-32 overflow-hidden flex items-center justify-center min-h-[50vh]"
+        >
             <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
             <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
@@ -41,8 +45,8 @@ export default function Contact() {
                     </h2>
 
                     <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mb-10 leading-relaxed">
-                        Seja para desenvolvimento web full-stack, revisão de arquitetura ou para construir
-                        experiências incríveis — eu estou sempre aberto para bater um papo.
+                        Seja para desenvolvimento web full-stack, revisão de arquitetura ou para construir experiências
+                        incríveis — eu estou sempre aberto para bater um papo.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -67,16 +71,14 @@ export default function Contact() {
                             <span>LinkedIn</span>
                         </a>
                     </div>
-                    
+
                     <button
                         onClick={handleCopyEmail}
                         className="mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground font-medium hover:text-foreground transition-colors duration-300 cursor-pointer"
                         aria-label="Copiar email"
                     >
                         {copied ? <Check size={16} className="text-primary" /> : <Copy size={16} />}
-                        <span className={copied ? "text-primary" : ""}>
-                            {copied ? 'Email copiado!' : email}
-                        </span>
+                        <span className={copied ? 'text-primary' : ''}>{copied ? 'Email copiado!' : email}</span>
                     </button>
                 </motion.div>
             </div>

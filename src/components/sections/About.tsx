@@ -12,14 +12,12 @@ const HIGHLIGHTS = [
     {
         icon: Code2,
         title: 'Arquitetura & Performance',
-        description:
-            'Foco em aplicações rápidas e otimizadas, reduzindo payloads e garantindo 100/100 no Lighthouse.',
+        description: 'Foco em aplicações rápidas e otimizadas, reduzindo payloads e garantindo 100/100 no Lighthouse.',
     },
     {
         icon: GraduationCap,
         title: 'Fundamentos Sólidos',
-        description:
-            'De jovem aprendiz no hardware à monitoria em C, priorizo entender a computação em baixo nível.',
+        description: 'De jovem aprendiz no hardware à monitoria em C, priorizo entender a computação em baixo nível.',
     },
     {
         icon: Rocket,
@@ -75,7 +73,9 @@ function AnimatedCounter({ raw, isActive }: { raw: string; isActive: boolean }) 
     const count = useCountUp(number, isActive);
     return (
         <span className="text-3xl font-extrabold text-gradient-cyan leading-none">
-            {prefix}{count}{suffix}
+            {prefix}
+            {count}
+            {suffix}
         </span>
     );
 }
@@ -90,7 +90,6 @@ export default function About() {
             <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
             <div className="max-w-6xl mx-auto px-6">
-
                 {/* ── Section heading ── */}
                 <motion.div
                     variants={fadeUp}
@@ -102,14 +101,12 @@ export default function About() {
                         Quem sou eu
                     </span>
                     <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                        Sobre{' '}
-                        <span className="text-gradient-cyan">mim</span>
+                        Sobre <span className="text-gradient-cyan">mim</span>
                     </h2>
                 </motion.div>
 
                 {/* ── Main content: text + stats ── */}
                 <div className="grid lg:grid-cols-[1fr,320px] gap-12 xl:gap-16 items-start mb-14">
-
                     {/* Text */}
                     <motion.div
                         variants={staggerContainer}
@@ -118,13 +115,30 @@ export default function About() {
                         className="flex flex-col gap-5 text-muted-foreground leading-relaxed text-[0.965rem]"
                     >
                         <motion.p variants={fadeUp}>
-                            Olá! Sou Felipe, estudante de Ciência da Computação na <span className="text-foreground font-medium">UERN</span> e desenvolvedor Full-Stack. Minha história com a tecnologia não começou no código, mas abrindo máquinas. Comecei como <span className="text-foreground font-medium">jovem aprendiz na manutenção de computadores e notebooks</span>, o que me deu uma base prática e curiosidade para entender como a computação funciona desde o hardware.
+                            Olá! Sou Felipe, estudante de Ciência da Computação na{' '}
+                            <span className="text-foreground font-medium">UERN</span> e desenvolvedor Full-Stack. Minha
+                            história com a tecnologia não começou no código, mas abrindo máquinas. Comecei como{' '}
+                            <span className="text-foreground font-medium">
+                                jovem aprendiz na manutenção de computadores e notebooks
+                            </span>
+                            , o que me deu uma base prática e curiosidade para entender como a computação funciona desde
+                            o hardware.
                         </motion.p>
                         <motion.p variants={fadeUp}>
-                            Hoje, traduzo essa mesma curiosidade para o desenvolvimento de software. Tenho visão completa do ciclo de vida de uma aplicação: da modelagem de bancos de dados robustos e APIs com <span className="text-foreground font-medium">Node.js e C# .NET</span>, à construção de interfaces de alta performance e apps nativos com <span className="text-foreground font-medium">React Native</span>. Trabalho focado em criar sistemas que equilibram arquitetura limpa e métricas reais de negócio.
+                            Hoje, traduzo essa mesma curiosidade para o desenvolvimento de software. Tenho visão
+                            completa do ciclo de vida de uma aplicação: da modelagem de bancos de dados robustos e APIs
+                            com <span className="text-foreground font-medium">Node.js e C# .NET</span>, à construção de
+                            interfaces de alta performance e apps nativos com{' '}
+                            <span className="text-foreground font-medium">React Native</span>. Trabalho focado em criar
+                            sistemas que equilibram arquitetura limpa e métricas reais de negócio.
                         </motion.p>
                         <motion.p variants={fadeUp}>
-                            Acredito que dominar a base é fundamental. Por isso, atuei como monitor acadêmico ensinando a <span className="text-foreground font-medium">linguagem C e alocação de memória</span>, e participo de projetos de extensão levando tecnologia para a comunidade. Já desenvolvi plataformas que impactaram diretamente mais de <span className="text-foreground font-medium">20 mil pessoas</span>, provando que um bom software vai muito além de telas bonitas, ele resolve problemas em escala.
+                            Acredito que dominar a base é fundamental. Por isso, atuei como monitor acadêmico ensinando
+                            a <span className="text-foreground font-medium">linguagem C e alocação de memória</span>, e
+                            participo de projetos de extensão levando tecnologia para a comunidade. Já desenvolvi
+                            plataformas que impactaram diretamente mais de{' '}
+                            <span className="text-foreground font-medium">20 mil pessoas</span>, provando que um bom
+                            software vai muito além de telas bonitas, ele resolve problemas em escala.
                         </motion.p>
                     </motion.div>
 
@@ -142,9 +156,7 @@ export default function About() {
                                 className="bg-card border border-border rounded-2xl p-5 flex flex-col gap-1.5 hover:border-primary/40 transition-colors duration-300"
                             >
                                 <AnimatedCounter raw={stat.value} isActive={isInView} />
-                                <span className="text-xs text-muted-foreground leading-snug">
-                                    {stat.label}
-                                </span>
+                                <span className="text-xs text-muted-foreground leading-snug">{stat.label}</span>
                             </motion.div>
                         ))}
                     </motion.div>
@@ -167,9 +179,7 @@ export default function About() {
                                 <Icon size={20} className="text-primary" />
                             </div>
                             <h3 className="font-semibold text-foreground">{title}</h3>
-                            <p className="text-sm text-muted-foreground leading-relaxed">
-                                {description}
-                            </p>
+                            <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
                         </motion.div>
                     ))}
                 </motion.div>

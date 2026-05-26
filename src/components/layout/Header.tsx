@@ -25,7 +25,7 @@ export default function Header() {
     useEffect(() => {
         const onScroll = () => {
             setScrolled(window.scrollY > 40);
-            
+
             if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
                 setActiveSection('contato');
             }
@@ -91,7 +91,7 @@ export default function Header() {
                             scrolled
                                 ? 'bg-card/90 backdrop-blur-xl border-b md:border-b-0 md:border md:shadow-lg shadow-black/30 border-border md:rounded-2xl'
                                 : 'bg-card/60 backdrop-blur-lg border-b md:border-b-0 md:border border-border/60 md:rounded-2xl',
-                            'px-4 py-3 md:px-3 md:py-2'
+                            'px-4 py-3 md:px-3 md:py-2',
                         )}
                     >
                         <button
@@ -276,9 +276,7 @@ export default function Header() {
                                         onClick={() => handleNavClick(link.href)}
                                         className={cn(
                                             'w-full text-center py-3 text-2xl font-semibold transition-colors cursor-pointer',
-                                            isActive
-                                                ? 'text-primary'
-                                                : 'text-muted-foreground hover:text-foreground'
+                                            isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
                                         )}
                                     >
                                         {link.label}
@@ -290,6 +288,5 @@ export default function Header() {
                 )}
             </AnimatePresence>
         </>
-    );    
+    );
 }
-

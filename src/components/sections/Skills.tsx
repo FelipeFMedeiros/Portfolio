@@ -63,60 +63,60 @@ interface StackCategory {
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const RADAR_SKILLS: readonly RadarSkill[] = [
-    { label: 'Front-end',     lines: ['Front-end'],      value: 90 },
-    { label: 'Back-end',      lines: ['Back-end'],       value: 80 },
-    { label: 'Mobile',        lines: ['Mobile'],         value: 78 },
-    { label: 'Banco de Dados',lines: ['Banco de','Dados'],value: 72 },
-    { label: 'UI/UX',         lines: ['UI/UX'],          value: 70 },
-    { label: 'DevOps & Cloud', lines: ['DevOps &','Cloud'], value: 65 },
+    { label: 'Front-end', lines: ['Front-end'], value: 90 },
+    { label: 'Back-end', lines: ['Back-end'], value: 80 },
+    { label: 'Mobile', lines: ['Mobile'], value: 78 },
+    { label: 'Banco de Dados', lines: ['Banco de', 'Dados'], value: 72 },
+    { label: 'UI/UX', lines: ['UI/UX'], value: 70 },
+    { label: 'DevOps & Cloud', lines: ['DevOps &', 'Cloud'], value: 65 },
 ] as const;
 
 const STACK: readonly StackCategory[] = [
     {
         category: 'Front-end',
         items: [
-            { name: 'React',       icon: SiReact,       color: '#61DAFB' },
-            { name: 'TypeScript',  icon: SiTypescript,  color: '#3178C6' },
+            { name: 'React', icon: SiReact, color: '#61DAFB' },
+            { name: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
             { name: 'TailwindCSS', icon: SiTailwindcss, color: '#06B6D4' },
-            { name: 'ShadcnUi',      icon: SiShadcnui, color: '#06B6D4' },
-            { name: 'Next.js',     icon: SiNextdotjs                     },
-            { name: 'Vite',        icon: SiVite,        color: '#646CFF' },
-            { name: 'Angular',     icon: SiAngular,     color: '#DD0031' },
-            { name: 'Axios',       icon: SiAxios,       color: '#5A29E4' }
+            { name: 'ShadcnUi', icon: SiShadcnui, color: '#06B6D4' },
+            { name: 'Next.js', icon: SiNextdotjs },
+            { name: 'Vite', icon: SiVite, color: '#646CFF' },
+            { name: 'Angular', icon: SiAngular, color: '#DD0031' },
+            { name: 'Axios', icon: SiAxios, color: '#5A29E4' },
         ],
     },
     {
         category: 'Back-end',
         items: [
-            { name: 'Node.js',   icon: SiNodedotjs, color: '#339933' },
-            { name: 'Express',   icon: SiExpress, color: '#339933' },
-            { name: 'C# / .NET', icon: SiDotnet,    color: '#512BD4' },
-            { name: 'Swagger', icon: SiSwagger,    color: '#512BD4' },
+            { name: 'Node.js', icon: SiNodedotjs, color: '#339933' },
+            { name: 'Express', icon: SiExpress, color: '#339933' },
+            { name: 'C# / .NET', icon: SiDotnet, color: '#512BD4' },
+            { name: 'Swagger', icon: SiSwagger, color: '#512BD4' },
         ],
     },
     {
         category: 'Mobile',
         items: [
             { name: 'React Native', icon: SiReact, color: '#61DAFB' },
-            { name: 'Expo',         icon: SiExpo                    },
+            { name: 'Expo', icon: SiExpo },
         ],
     },
     {
         category: 'Banco de Dados',
         items: [
             { name: 'SQL Server', icon: Database, color: '#CC2927' },
-            { name: 'MySQL',      icon: SiMysql,  color: '#4479A1' },
-            { name: 'MongoDB',     icon: SiMongodb,  color: '#47A248' },
-            { name: 'Prisma',     icon: SiPrisma                   },
-            { name: 'Redis',     icon: SiRedis,  color: '#DC382D' },
+            { name: 'MySQL', icon: SiMysql, color: '#4479A1' },
+            { name: 'MongoDB', icon: SiMongodb, color: '#47A248' },
+            { name: 'Prisma', icon: SiPrisma },
+            { name: 'Redis', icon: SiRedis, color: '#DC382D' },
         ],
     },
     {
         category: 'Ferramentas',
         items: [
-            { name: 'Git',    icon: SiGit,    color: '#F05032' },
-            { name: 'GitHub', icon: SiGithub                   },
-            { name: 'Figma',  icon: SiFigma,  color: '#F24E1E' },
+            { name: 'Git', icon: SiGit, color: '#F05032' },
+            { name: 'GitHub', icon: SiGithub },
+            { name: 'Figma', icon: SiFigma, color: '#F24E1E' },
             { name: 'Postman', icon: SiPostman, color: '#2496ED' },
             { name: 'Swagger', icon: SiSwagger, color: '#2496ED' },
         ],
@@ -127,24 +127,23 @@ const STACK: readonly StackCategory[] = [
             { name: 'Cloudflare', icon: SiCloudflare, color: '#F38020' },
             { name: 'Vercel', icon: SiVercel, color: '#000000' },
             { name: 'Docker', icon: SiDocker, color: '#2496ED' },
-            { name: 'Azure',  icon: VscAzure, color: '#0078D4' },
+            { name: 'Azure', icon: VscAzure, color: '#0078D4' },
             { name: 'DigitalOcean', icon: SiDigitalocean, color: '#008BCF' },
-            { name: 'Nginx',  icon: SiNginx, color: '#009688' },
-            { name: 'Linux',  icon: SiLinux,  color: '#F6821F' }
-
+            { name: 'Nginx', icon: SiNginx, color: '#009688' },
+            { name: 'Linux', icon: SiLinux, color: '#F6821F' },
         ],
     },
 ] as const;
 
 // ── Radar geometry (computed once, outside render) ────────────────────────────
 
-const CX          = 250;
-const CY          = 250;
-const MAX_R       = 130;
-const LABEL_R     = 188;
-const N           = RADAR_SKILLS.length;
-const LINE_H      = 15;   // px between label lines
-const RINGS       = [0.25, 0.5, 0.75, 1.0] as const;
+const CX = 250;
+const CY = 250;
+const MAX_R = 130;
+const LABEL_R = 188;
+const N = RADAR_SKILLS.length;
+const LINE_H = 15; // px between label lines
+const RINGS = [0.25, 0.5, 0.75, 1.0] as const;
 
 function angle(i: number) {
     return -Math.PI / 2 + (2 * Math.PI * i) / N;
@@ -156,30 +155,32 @@ function pt(i: number, r: number) {
 }
 
 function polyPoints(radii: readonly number[]) {
-    return radii.map((r, i) => {
-        const p = pt(i, r);
-        return `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
-    }).join(' ');
+    return radii
+        .map((r, i) => {
+            const p = pt(i, r);
+            return `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+        })
+        .join(' ');
 }
 
-const ringPolys   = RINGS.map(r => polyPoints(Array.from({ length: N }, () => MAX_R * r)));
-const dataCoords  = RADAR_SKILLS.map((s, i) => pt(i, MAX_R * s.value / 100));
-const dataPoly    = dataCoords.map(p => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
+const ringPolys = RINGS.map((r) => polyPoints(Array.from({ length: N }, () => MAX_R * r)));
+const dataCoords = RADAR_SKILLS.map((s, i) => pt(i, (MAX_R * s.value) / 100));
+const dataPoly = dataCoords.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
 
 // ── Framer Motion variants ────────────────────────────────────────────────────
 
 const fadeUp: Variants = {
-    hidden:  { opacity: 0, y: 32 },
+    hidden: { opacity: 0, y: 32 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
 };
 
 const stagger: Variants = {
-    hidden:  {},
+    hidden: {},
     visible: { transition: { staggerChildren: 0.08 } },
 };
 
 const rowFade: Variants = {
-    hidden:  { opacity: 0, y: 16 },
+    hidden: { opacity: 0, y: 16 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
 };
 
@@ -196,31 +197,19 @@ function RadarChart({ isInView }: { isInView: boolean }) {
         >
             {/* ── Background rings ── */}
             {ringPolys.map((pts, ri) => (
-                <polygon
-                    key={ri}
-                    points={pts}
-                    fill="none"
-                    stroke="oklch(0.28 0.01 264)"
-                    strokeWidth={1}
-                />
+                <polygon key={ri} points={pts} fill="none" stroke="oklch(0.28 0.01 264)" strokeWidth={1} />
             ))}
 
             {/* ── Axis lines ── */}
             {RADAR_SKILLS.map((_, i) => {
                 const end = pt(i, MAX_R);
                 return (
-                    <line
-                        key={i}
-                        x1={CX} y1={CY}
-                        x2={end.x} y2={end.y}
-                        stroke="oklch(0.28 0.01 264)"
-                        strokeWidth={1}
-                    />
+                    <line key={i} x1={CX} y1={CY} x2={end.x} y2={end.y} stroke="oklch(0.28 0.01 264)" strokeWidth={1} />
                 );
             })}
 
             {/* ── Ring % hints ── */}
-            {[0.25, 0.5, 0.75].map(r => (
+            {[0.25, 0.5, 0.75].map((r) => (
                 <text
                     key={r}
                     x={CX + 4}
@@ -267,43 +256,51 @@ function RadarChart({ isInView }: { isInView: boolean }) {
             ))}
 
             {/* ── Tooltip ── */}
-            {hovered !== null && (() => {
-                const coord   = dataCoords[hovered];
-                const sin     = Math.sin(angle(hovered));
-                const W = 46, H = 24;
-                const ty      = sin < 0
-                    ? coord.y + 10             // dot in upper half → tooltip below
-                    : coord.y - H - 10;        // dot in lower half → tooltip above
-                return (
-                    <g pointerEvents="none">
-                        <rect
-                            x={coord.x - W / 2} y={ty}
-                            width={W} height={H} rx={6}
-                            fill="oklch(0.13 0.01 264)"
-                            stroke="oklch(0.76 0.15 207 / 0.45)"
-                            strokeWidth={1}
-                        />
-                        <text
-                            x={coord.x} y={ty + H / 2}
-                            textAnchor="middle" dominantBaseline="middle"
-                            fill="oklch(0.76 0.15 207)"
-                            fontSize="11" fontWeight="600"
-                            fontFamily="Inter, sans-serif"
-                        >
-                            {RADAR_SKILLS[hovered].value}%
-                        </text>
-                    </g>
-                );
-            })()}
+            {hovered !== null &&
+                (() => {
+                    const coord = dataCoords[hovered];
+                    const sin = Math.sin(angle(hovered));
+                    const W = 46,
+                        H = 24;
+                    const ty =
+                        sin < 0
+                            ? coord.y + 10 // dot in upper half → tooltip below
+                            : coord.y - H - 10; // dot in lower half → tooltip above
+                    return (
+                        <g pointerEvents="none">
+                            <rect
+                                x={coord.x - W / 2}
+                                y={ty}
+                                width={W}
+                                height={H}
+                                rx={6}
+                                fill="oklch(0.13 0.01 264)"
+                                stroke="oklch(0.76 0.15 207 / 0.45)"
+                                strokeWidth={1}
+                            />
+                            <text
+                                x={coord.x}
+                                y={ty + H / 2}
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                fill="oklch(0.76 0.15 207)"
+                                fontSize="11"
+                                fontWeight="600"
+                                fontFamily="Inter, sans-serif"
+                            >
+                                {RADAR_SKILLS[hovered].value}%
+                            </text>
+                        </g>
+                    );
+                })()}
 
             {/* ── Axis labels ── */}
             {RADAR_SKILLS.map((skill, i) => {
-                const a   = angle(i);
-                const lx  = CX + LABEL_R * Math.cos(a);
-                const ly  = CY + LABEL_R * Math.sin(a);
+                const a = angle(i);
+                const lx = CX + LABEL_R * Math.cos(a);
+                const ly = CY + LABEL_R * Math.sin(a);
                 const cos = Math.cos(a);
-                const anchor: 'start' | 'middle' | 'end' =
-                    cos < -0.3 ? 'end' : cos > 0.3 ? 'start' : 'middle';
+                const anchor: 'start' | 'middle' | 'end' = cos < -0.3 ? 'end' : cos > 0.3 ? 'start' : 'middle';
 
                 return (
                     <text
@@ -318,9 +315,7 @@ function RadarChart({ isInView }: { isInView: boolean }) {
                             <tspan
                                 key={j}
                                 x={lx}
-                                y={j === 0
-                                    ? ly - ((skill.lines.length - 1) * LINE_H) / 2
-                                    : undefined}
+                                y={j === 0 ? ly - ((skill.lines.length - 1) * LINE_H) / 2 : undefined}
                                 dy={j === 0 ? '0.35em' : LINE_H}
                             >
                                 {line}
@@ -337,7 +332,7 @@ function RadarChart({ isInView }: { isInView: boolean }) {
 
 export default function Skills() {
     const sectionRef = useRef<HTMLElement>(null);
-    const isInView   = useInView(sectionRef, { once: true, margin: '-80px' });
+    const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
 
     return (
         <section ref={sectionRef} id="habilidades" className="relative py-24 overflow-hidden">
@@ -345,7 +340,6 @@ export default function Skills() {
             <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
             <div className="max-w-6xl mx-auto px-6">
-
                 {/* ── Heading ── */}
                 <motion.div
                     variants={fadeUp}
@@ -357,8 +351,7 @@ export default function Skills() {
                         Habilidades
                     </span>
                     <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                        Minhas{' '}
-                        <span className="text-gradient-cyan">Skills</span>
+                        Minhas <span className="text-gradient-cyan">Skills</span>
                     </h2>
                 </motion.div>
 
@@ -423,7 +416,6 @@ export default function Skills() {
                         ))}
                     </motion.div>
                 </div>
-
             </div>
         </section>
     );

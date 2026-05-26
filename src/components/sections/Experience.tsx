@@ -73,15 +73,7 @@ const fadeRight: Variants = {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-function TimelineItem({
-    exp,
-    index,
-    isInView,
-}: {
-    exp: ExperienceEntry;
-    index: number;
-    isInView: boolean;
-}) {
+function TimelineItem({ exp, index, isInView }: { exp: ExperienceEntry; index: number; isInView: boolean }) {
     return (
         <motion.div
             variants={fadeRight}
@@ -105,13 +97,10 @@ function TimelineItem({
 
             {/* Card / Container */}
             <div className="md:bg-card md:border md:border-border md:rounded-2xl pb-6 md:p-6 md:hover:border-primary/30 md:hover:-translate-y-0.5 transition-all duration-300 group">
-
                 {/* Headers */}
                 <div className="flex flex-col gap-1.5 mb-3">
                     <div className="flex flex-wrap items-center gap-3">
-                        <h3 className="font-bold text-lg md:text-xl text-foreground leading-tight">
-                            {exp.role}
-                        </h3>
+                        <h3 className="font-bold text-lg md:text-xl text-foreground leading-tight">{exp.role}</h3>
                         {exp.current && (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
                                 <span className="size-1.5 rounded-full bg-primary animate-pulse" />
@@ -119,9 +108,7 @@ function TimelineItem({
                             </span>
                         )}
                     </div>
-                    <h4 className="text-base font-semibold text-primary">
-                        {exp.company}
-                    </h4>
+                    <h4 className="text-base font-semibold text-primary">{exp.company}</h4>
                 </div>
 
                 {/* Meta row */}
@@ -139,11 +126,12 @@ function TimelineItem({
                 {/* Bullets */}
                 <ul className="flex flex-col gap-3.5 mb-6">
                     {exp.bullets.map((bullet, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm md:text-[0.965rem] text-muted-foreground/90 leading-relaxed">
+                        <li
+                            key={i}
+                            className="flex items-start gap-3 text-sm md:text-[0.965rem] text-muted-foreground/90 leading-relaxed"
+                        >
                             <span className="mt-2 shrink-0 size-1.5 rounded-full bg-primary/50" />
-                            <span className="flex-1">
-                                {bullet}
-                            </span>
+                            <span className="flex-1">{bullet}</span>
                         </li>
                     ))}
                 </ul>
@@ -176,7 +164,6 @@ export default function Experience() {
             <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
             <div className="max-w-6xl mx-auto px-6">
-
                 {/* ── Section heading ── */}
                 <motion.div
                     variants={fadeUp}
@@ -188,14 +175,12 @@ export default function Experience() {
                         Experiência
                     </span>
                     <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                        Trajetória{' '}
-                        <span className="text-gradient-cyan">Profissional</span>
+                        Trajetória <span className="text-gradient-cyan">Profissional</span>
                     </h2>
                 </motion.div>
 
                 {/* ── Timeline ── */}
                 <div className="relative max-w-3xl">
-
                     {/* Vertical line */}
                     <motion.div
                         initial={{ scaleY: 0 }}
@@ -208,12 +193,7 @@ export default function Experience() {
                     {/* Entries */}
                     <div className="flex flex-col gap-8 sm:gap-10">
                         {EXPERIENCES.map((exp, i) => (
-                            <TimelineItem
-                                key={exp.role}
-                                exp={exp}
-                                index={i}
-                                isInView={isInView}
-                            />
+                            <TimelineItem key={exp.role} exp={exp} index={i} isInView={isInView} />
                         ))}
                     </div>
                 </div>
