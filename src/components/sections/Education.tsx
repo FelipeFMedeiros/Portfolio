@@ -33,42 +33,42 @@ const CERTIFICATES: Certificate[] = [
         issuer: 'Rocketseat',
         date: 'Mar 2026',
         credentialUrl: 'https://app.rocketseat.com.br/certificates/f77fed0d-9554-41e6-837b-4889b2ab3bed',
-        imageUrl: '/certs/Certificate_NLW_Operator_Fullstack.png',
+        imageUrl: '/certs/Certificate_NLW_Operator_Fullstack.webp',
     },
     {
         title: 'Neural Mechanisms of Cognitive Function Meeting',
         issuer: 'Santos Dumont Institute - Science and Education',
         date: 'Apr 2025',
         credentialUrl: '/certs/certificado_Felipe_Freitas_de_Medeiros_Neural.pdf',
-        imageUrl: '/certs/certificado_Felipe_Freitas_de_Medeiros.png',
+        imageUrl: '/certs/certificado_Felipe_Freitas_de_Medeiros.webp',
     },
     {
         title: 'Complete React v9',
         issuer: 'Frontend Masters',
         date: 'Mar 2025',
         credentialUrl: 'https://static.frontendmasters.com/ud/c/44c0ee8b71/hixpadIGiV/complete-react-v9.pdf',
-        imageUrl: '/certs/complete-react-v9.png',
+        imageUrl: '/certs/complete-react-v9.webp',
     },
     {
         title: 'React and TypeScript, v2',
         issuer: 'Frontend Masters',
         date: 'Mar 2025',
         credentialUrl: 'https://static.frontendmasters.com/ud/c/44c0ee8b71/XgkBlJxZQC/react-typescript-v2.pdf',
-        imageUrl: '/certs/react-typescript-v2.png',
+        imageUrl: '/certs/react-typescript-v2.webp',
     },
     {
         title: 'The Origins III: JavaScript',
         issuer: 'Codédex',
         date: 'Feb 2025',
         credentialUrl: 'https://www.codedex.io/certificates/0f89352f-aa64-401c-a283-a90b98abc379',
-        imageUrl: '/certs/The_Origins III_JavaScript.png',
+        imageUrl: '/certs/The_Origins III_JavaScript.webp',
     },
     {
         title: 'Everything Git',
         issuer: 'Frontend Masters',
         date: 'Jan 2025',
         credentialUrl: 'https://static.frontendmasters.com/ud/c/44c0ee8b71/tNgMJoASup/everything-git.pdf',
-        imageUrl: '/certs/everything-git.png',
+        imageUrl: '/certs/everything-git.webp',
     },
 ];
 
@@ -113,11 +113,9 @@ export default function Education() {
         };
     }, []);
 
-    const handleScrollLeft = () =>
-        scrollRef.current?.scrollBy({ left: -308, behavior: 'smooth' });
+    const handleScrollLeft = () => scrollRef.current?.scrollBy({ left: -308, behavior: 'smooth' });
 
-    const handleScrollRight = () =>
-        scrollRef.current?.scrollBy({ left: 308, behavior: 'smooth' });
+    const handleScrollRight = () => scrollRef.current?.scrollBy({ left: 308, behavior: 'smooth' });
 
     return (
         <section ref={sectionRef} id="educacao" className="relative py-24 overflow-hidden">
@@ -125,7 +123,6 @@ export default function Education() {
             <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
             <div className="max-w-6xl mx-auto px-6">
-
                 {/* ── Section heading ── */}
                 <motion.div
                     variants={fadeUp}
@@ -137,8 +134,7 @@ export default function Education() {
                         Educação
                     </span>
                     <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                        Formação &{' '}
-                        <span className="text-gradient-cyan">Certificações</span>
+                        Formação & <span className="text-gradient-cyan">Certificações</span>
                     </h2>
                 </motion.div>
 
@@ -152,11 +148,7 @@ export default function Education() {
                     <div className="flex flex-col sm:flex-row gap-5 md:gap-6 items-start mb-7 md:mb-8">
                         {/* Logo */}
                         <div className="shrink-0 size-16 md:size-20 rounded-2xl bg-[#104A90] overflow-hidden flex items-center justify-center p-2 border border-border/30">
-                            <img
-                                src="/uern-logo.png"
-                                alt="UERN"
-                                className="size-full object-contain"
-                            />
+                            <img src="/uern-logo.png" alt="UERN" className="size-full object-contain" />
                         </div>
 
                         {/* Info */}
@@ -216,16 +208,11 @@ export default function Education() {
                 </motion.div>
 
                 {/* ── Certificates ── */}
-                <motion.div
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate={isInView ? 'visible' : 'hidden'}
-                >
+                <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
                     {/* Header row */}
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="font-bold text-2xl">
-                            Cursos &{' '}
-                            <span className="text-gradient-cyan">Certificações</span>
+                            Cursos & <span className="text-gradient-cyan">Certificações</span>
                         </h3>
                         <div className="flex gap-2">
                             <button
@@ -262,12 +249,12 @@ export default function Education() {
                                 {/* Visual header */}
                                 <div className="h-45 bg-linear-to-br from-primary/15 via-primary/5 to-secondary relative overflow-hidden flex items-center justify-center">
                                     {cert.imageUrl ? (
-                                        <a href={cert.credentialUrl} target='_blank'>
+                                        <a href={cert.credentialUrl} target="_blank">
                                             <img
                                                 src={cert.imageUrl}
                                                 alt={cert.title}
                                                 className="w-full h-full object-cover"
-                                                />
+                                            />
                                         </a>
                                     ) : (
                                         <Award
@@ -284,9 +271,7 @@ export default function Education() {
                                     <h4 className="font-semibold text-sm text-foreground leading-snug line-clamp-2">
                                         {cert.title}
                                     </h4>
-                                    <p className="text-xs text-primary font-medium mt-0.5">
-                                        {cert.issuer}
-                                    </p>
+                                    <p className="text-xs text-primary font-medium mt-0.5">{cert.issuer}</p>
                                     <p className="text-xs text-muted-foreground">{cert.date}</p>
 
                                     {cert.credentialUrl && (

@@ -1,13 +1,12 @@
 // ── Images ──────────────────────────────────────────────────────────────────────
 
-import dnaCover from '../assets/projects-images/dna-1.png';
-import focoqualiCover from '../assets/projects-images/focoquali-1.png';
-import simmonsCover from '../assets/projects-images/simmons-1.png';
-import simmons2 from '../assets/projects-images/simmons-2.png';
-import santoriniCover from '../assets/projects-images/santorini-1.png';
-import santorini2 from '../assets/projects-images/santorini-2.png';
-//import poupouCover from '../assets/projects-images/poupou-1.png';
-
+import dnaCover from '../assets/projects-images/dna-1.webp';
+import focoqualiCover from '../assets/projects-images/focoquali-1.webp';
+import simmonsCover from '../assets/projects-images/simmons-1.webp';
+import simmons2 from '../assets/projects-images/simmons-2.webp';
+import santoriniCover from '../assets/projects-images/santorini-1.webp';
+import santorini2 from '../assets/projects-images/santorini-2.webp';
+//import poupouCover from '../assets/projects-images/poupou-1.webp';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -81,7 +80,7 @@ export const PROJECTS: readonly Project[] = [
             'Otimizei a performance de dados mobile, reduzindo em 50% o tamanho dos payloads JSON e melhorando o tempo de carregamento em 30% através da refatoração de endpoints e estratégias de cache no backend.',
             'Liderei a transição tecnológica da interface principal, refatorando a landing page para React, TypeScript e TailwindCSS, elevando o engajamento através de SEO avançado e práticas de UI/UX moderno.',
             'Implementei um sistema crítico de emissão de documentos (PDF/CMYK) para 20 mil alunos, integrando Razor Pages e JavaScript para atender aos requisitos técnicos de produção gráfica em larga escala.',
-            'Projetei interfaces de alta fidelidade no Figma, garantindo a consistência visual entre web e mobile e acelerando o processo de desenvolvimento frontend.'
+            'Projetei interfaces de alta fidelidade no Figma, garantindo a consistência visual entre web e mobile e acelerando o processo de desenvolvimento frontend.',
         ],
         category: 'profissional',
         tags: ['React', 'TypeScript', 'React Native', 'Expo', 'C#', '.NET', 'SQL Server', 'Figma'],
@@ -104,7 +103,7 @@ export const PROJECTS: readonly Project[] = [
             'Criei painel administrativo completo para gerenciamento de ebooks, categorias, leads e mensagens de contato, com sistema de upload de PDFs em VPS Ubuntu 24.04.',
             'Implementei sistema automatizado de notificações via email para usuários que baixam ebooks e logs para administradores.',
             'A entrega contínua resultou na captação de centenas de novos clientes e maior visibilidade empresarial.',
-            'Atuo no acompanhamento técnico contínuo (PJ) para a evolução full-stack da plataforma, garantindo escalabilidade e alinhamento com as metas de negócio do cliente.'
+            'Atuo no acompanhamento técnico contínuo (PJ) para a evolução full-stack da plataforma, garantindo escalabilidade e alinhamento com as metas de negócio do cliente.',
         ],
         category: 'freelancer',
         tags: ['React', 'TypeScript', 'TailwindCSS', 'Node.js', 'Express.js', 'Prisma', 'PostgreSQL', 'Zod', 'Swagger'],
@@ -124,7 +123,7 @@ export const PROJECTS: readonly Project[] = [
             'Desenvolvi landing page responsiva utilizando React e TypeScript, aplicando o React Compiler para otimização automática de renderização e Shadcn/UI com TailwindCSS para uma interface moderna e consistente.',
             'Reduzi em 60% o tempo de carregamento (LCP/FCP) através da otimização de build e assets, atingindo o score máximo (100/100) em Performance, Acessibilidade e SEO no Google Lighthouse.',
             'Implementei estratégias de SEO Técnico focadas em conversão, estruturando a página para máxima captura de leads e visibilidade nos motores de busca.',
-            'Entreguei uma solução de ponta a ponta que fortaleceu a credibilidade da marca e a presença digital da loja através de uma experiência de usuário (UX) fluida e intuitiva.'
+            'Entreguei uma solução de ponta a ponta que fortaleceu a credibilidade da marca e a presença digital da loja através de uma experiência de usuário (UX) fluida e intuitiva.',
         ],
         category: 'freelancer',
         tags: ['React', 'TypeScript', 'React Compiler', 'Shadcn/UI', 'TailwindCSS'],
@@ -132,7 +131,7 @@ export const PROJECTS: readonly Project[] = [
         coverImage: simmonsCover,
         screenshots: [
             { src: simmonsCover, caption: 'Tela Principal da Landing Page' },
-            { src: simmons2, caption: 'Seção de Produtos em Destaque' }
+            { src: simmons2, caption: 'Seção de Produtos em Destaque' },
         ],
         year: '2026',
         featured: true,
@@ -147,7 +146,7 @@ export const PROJECTS: readonly Project[] = [
             'Desenvolvi landing page de alta performance para o nicho de móveis de luxo, utilizando React, TypeScript e TailwindCSS, com foco em uma interface visualmente refinada e responsiva.',
             'Colaborei com o Gestor de Tráfego para alinhar a performance técnica (LCP/FCP) às campanhas de anúncios, reduzindo a taxa de rejeição e maximizando a taxa de conversão dos leads.',
             'Otimizei a jornada de compra através de uma navegação intuitiva de catálogo, facilitando o acesso a especificações de produtos e acelerando a tomada de decisão do cliente.',
-            'Implementei renderização eficiente com React Compiler, garantindo uma experiência fluida mesmo em dispositivos mobile com conexões limitadas.'
+            'Implementei renderização eficiente com React Compiler, garantindo uma experiência fluida mesmo em dispositivos mobile com conexões limitadas.',
         ],
         category: 'freelancer',
         tags: ['React', 'TypeScript', 'React Compiler', 'TailwindCSS'],
@@ -155,7 +154,7 @@ export const PROJECTS: readonly Project[] = [
         coverImage: santoriniCover,
         screenshots: [
             { src: santoriniCover, caption: 'Tela Principal da Landing Page' },
-            { src: santorini2, caption: 'Catálogo de Produtos' }
+            { src: santorini2, caption: 'Catálogo de Produtos' },
         ],
         year: '2025',
         featured: true,
@@ -171,17 +170,17 @@ export const PROJECTS: readonly Project[] = [
             'Implementei infraestrutura moderna com Docker e CI/CD via GitHub Actions, automatizando o ciclo de entrega e garantindo 99.9% de disponibilidade da plataforma em ambiente VPS.',
             'Desenvolvi um motor de busca e filtragem otimizado para ofertas e cupons, integrando painéis administrativos para gestão dinâmica de lojistas parceiros e métricas de conversão.',
             'Atuei em sinergia com a gestão de tráfego pago, otimizando o funil de conversão técnico e o SEO, o que resultou em um crescimento exponencial e diário da base de usuários ativos.',
-            'Projetei uma arquitetura de banco de dados (PostgreSQL) focada em performance, garantindo tempos de resposta baixos mesmo durante picos de tráfego originados por campanhas de anúncios.'
+            'Projetei uma arquitetura de banco de dados (PostgreSQL) focada em performance, garantindo tempos de resposta baixos mesmo durante picos de tráfego originados por campanhas de anúncios.',
         ],
         category: 'freelancer',
         tags: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Docker', 'GitHub Actions'],
         liveUrl: 'https://poupoulegal.com.br',
-        coverImage: '/projects/poupou-1.png',
+        coverImage: '/projects/poupou-1.webp',
         screenshots: [
-            { src: '/projects/poupou-1.png', caption: 'Página Inicial da Plataforma' },
-            { src: '/projects/poupou-2.png', caption: 'Painel Administrativo' }
+            { src: '/projects/poupou-1.webp', caption: 'Página Inicial da Plataforma' },
+            { src: '/projects/poupou-2.webp', caption: 'Painel Administrativo' },
         ],
         year: '2025',
         featured: true,
-    }
+    },
 ] as const;

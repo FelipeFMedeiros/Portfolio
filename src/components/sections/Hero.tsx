@@ -100,7 +100,12 @@ export default function Hero() {
                             Ver Projetos
                             <ArrowRight size={16} />
                         </Button>
-                        <Button size="lg" variant="outline" asChild className="gap-2 font-semibold hover:text-white hover:border-white">
+                        <Button
+                            size="lg"
+                            variant="outline"
+                            asChild
+                            className="gap-2 font-semibold hover:text-white hover:border-white"
+                        >
                             <a href="/CV_FullStack_FelipeMedeiros.pdf" download="CV_FullStack_FelipeMedeiros.pdf">
                                 <Download size={16} />
                                 Download CV
@@ -147,9 +152,10 @@ export default function Hero() {
                                 </div>
                             ) : (
                                 <img
-                                    src="/profile.jpg"
+                                    src="/profile.webp"
                                     alt="Felipe Medeiros"
                                     className="w-full h-full object-cover"
+                                    fetchPriority="high"
                                     onError={() => setImgError(true)}
                                 />
                             )}
