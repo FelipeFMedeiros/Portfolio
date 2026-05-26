@@ -43,7 +43,7 @@ export default function Hero() {
             <div className="absolute inset-0 hero-dot-grid opacity-40" />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,oklch(0.76_0.15_207/0.08),transparent)]" />
 
-            <div className="relative z-10 w-full max-w-6xl mx-auto px-6 pt-24 pb-16 flex flex-col lg:flex-row items-center gap-10 xl:gap-16">
+            <div className="relative z-10 w-full max-w-6xl mx-auto px-6 pt-24 pb-32 lg:pb-16 flex flex-col lg:flex-row items-center gap-10 xl:gap-16">
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
@@ -101,7 +101,7 @@ export default function Hero() {
                             <ArrowRight size={16} />
                         </Button>
                         <Button size="lg" variant="outline" asChild className="gap-2 font-semibold hover:text-white hover:border-white">
-                            <a href="/Felipe_Medeiros_CV.pdf" download="Felipe_Medeiros_CV.pdf">
+                            <a href="/CV_FullStack_FelipeMedeiros.pdf" download="CV_FullStack_FelipeMedeiros.pdf">
                                 <Download size={16} />
                                 Download CV
                             </a>
@@ -172,7 +172,7 @@ export default function Hero() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.5, duration: 0.5 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
+                className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-1.5"
             >
                 <span className="text-xs text-muted-foreground">Role para baixo</span>
                 <motion.div

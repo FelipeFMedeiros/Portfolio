@@ -147,11 +147,11 @@ export default function Education() {
                     variants={fadeUp}
                     initial="hidden"
                     animate={isInView ? 'visible' : 'hidden'}
-                    className="bg-card border border-border rounded-3xl p-6 sm:p-8 mb-16 hover:border-primary/30 transition-colors duration-300"
+                    className="md:bg-card md:border md:border-border md:rounded-3xl mb-16 pb-8 md:p-8 md:hover:border-primary/30 md:hover:-translate-y-0.5 transition-all duration-300 group"
                 >
-                    <div className="flex flex-col sm:flex-row gap-5 items-start mb-7">
+                    <div className="flex flex-col sm:flex-row gap-5 md:gap-6 items-start mb-7 md:mb-8">
                         {/* Logo */}
-                        <div className="shrink-0 size-16 sm:size-20 rounded-2xl bg-[#104A90] overflow-hidden flex items-center justify-center p-2 border border-border/30">
+                        <div className="shrink-0 size-16 md:size-20 rounded-2xl bg-[#104A90] overflow-hidden flex items-center justify-center p-2 border border-border/30">
                             <img
                                 src="/uern-logo.png"
                                 alt="UERN"
@@ -160,33 +160,40 @@ export default function Education() {
                         </div>
 
                         {/* Info */}
-                        <div className="flex-1 min-w-0">
-                            <div className="flex flex-wrap items-center gap-2.5 mb-2.5">
-                                <h3 className="font-bold text-xl text-foreground leading-tight">
-                                    Bacharelado em Ciência da Computação
-                                </h3>
-                                <span className="inline-flex shrink-0 items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
-                                    <span className="size-1.5 rounded-full bg-primary animate-pulse" />
-                                    Em andamento
-                                </span>
+                        <div className="flex-1 min-w-0 pr-2">
+                            {/* Headers */}
+                            <div className="flex flex-col gap-1.5 mb-3">
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <h3 className="font-bold text-lg md:text-xl text-foreground leading-tight">
+                                        Bacharelado em Ciência da Computação
+                                    </h3>
+                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
+                                        <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+                                        Em andamento
+                                    </span>
+                                </div>
+                                <h4 className="text-base font-semibold text-primary">
+                                    Universidade do Estado do Rio Grande do Norte
+                                </h4>
                             </div>
-                            <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-muted-foreground">
-                                <span>Universidade do Estado do Rio Grande do Norte</span>
+
+                            {/* Meta row */}
+                            <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-[13px] md:text-sm text-muted-foreground mt-4">
                                 <span className="flex items-center gap-1.5">
-                                    <MapPin size={13} />
-                                    Natal, RN
+                                    <Calendar size={14} />
+                                    Abr 2023 — Presente · 7º período
                                 </span>
                                 <span className="flex items-center gap-1.5">
-                                    <Calendar size={13} />
-                                    Abr 2023 — Presente · 7º período
+                                    <MapPin size={14} />
+                                    Natal, RN
                                 </span>
                             </div>
                         </div>
                     </div>
 
                     {/* Disciplines */}
-                    <div className="border-t border-border pt-6">
-                        <p className="text-[0.68rem] font-semibold text-muted-foreground uppercase tracking-[0.18em] mb-4">
+                    <div className="border-t border-border/50 md:border-border pt-5 md:pt-6">
+                        <p className="text-[0.68rem] md:text-xs font-semibold text-muted-foreground uppercase tracking-[0.18em] mb-4">
                             Disciplinas destacadas
                         </p>
                         <motion.div
@@ -199,7 +206,7 @@ export default function Education() {
                                 <motion.span
                                     key={d}
                                     variants={fadeUp}
-                                    className="px-3 py-1 text-xs font-medium rounded-lg bg-secondary text-secondary-foreground border border-border hover:border-primary/40 hover:text-foreground transition-all duration-200 cursor-default"
+                                    className="px-2.5 py-1 text-xs font-medium rounded-lg bg-secondary text-secondary-foreground border border-border hover:border-primary/40 hover:text-foreground transition-all duration-200 cursor-default"
                                 >
                                     {d}
                                 </motion.span>

@@ -52,6 +52,17 @@ export default function Header() {
         return () => observers.forEach((o) => o.disconnect());
     }, []);
 
+    useEffect(() => {
+        if (mobileOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [mobileOpen]);
+
     const handleNavClick = (href: string) => {
         setMobileOpen(false);
         if (!isHome) {
@@ -64,112 +75,55 @@ export default function Header() {
     };
 
     return (
-        <motion.header
-            initial={{ opacity: 0, y: -24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none pt-4 px-4"
-        >
-            <div className="relative pointer-events-auto">
-                <div
-                    className={cn(
-                        'flex items-center gap-1 px-3 py-2 rounded-2xl border transition-all duration-300',
-                        scrolled
-                            ? 'bg-card/90 backdrop-blur-xl border-border shadow-lg shadow-black/30'
-                            : 'bg-card/60 backdrop-blur-lg border-border/60',
-                    )}
-                >
-                    <button
-                        onClick={() => {
-                            if (!isHome) {
-                                window.location.href = '/';
-                            } else {
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }
-                        }}
-                        className="flex items-center gap-2 mr-1 group cursor-pointer"
-                        aria-label="Topo"
+        <>
+            <motion.header
+                initial={{ opacity: 0, y: -24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="fixed top-0 left-0 right-0 z-50 flex md:justify-center pointer-events-none md:pt-4 md:px-4"
+            >
+                <div className="relative pointer-events-auto w-full md:w-auto">
+                    <div
+                        className={cn(
+                            'flex items-center justify-between md:justify-start gap-1 transition-all duration-300',
+                            scrolled
+                                ? 'bg-card/90 backdrop-blur-xl border-b md:border-b-0 md:border md:shadow-lg shadow-black/30 border-border md:rounded-2xl'
+                                : 'bg-card/60 backdrop-blur-lg border-b md:border-b-0 md:border border-border/60 md:rounded-2xl',
+                            'px-4 py-3 md:px-3 md:py-2'
+                        )}
                     >
-                        <span className="size-7 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs shrink-0">
-                            FM
-                        </span>
-                        <span className="hidden lg:block text-sm font-semibold text-foreground group-hover:text-primary transition-colors pr-1">
-                            Felipe
-                        </span>
-                    </button>
-
-                    <div className="hidden md:block w-px h-4 bg-border mx-1 shrink-0" />
-
-                    <nav className="hidden md:flex items-center gap-0.5">
-                        {NAV_LINKS.map((link) => {
-                            const isActive = activeSection === link.href.slice(1);
-                            return (
-                                <button
-                                    key={link.href}
-                                    onClick={() => handleNavClick(link.href)}
-                                    className={cn(
-                                        'relative px-3 py-1.5 text-sm font-medium rounded-xl transition-colors cursor-pointer',
-                                        isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
-                                    )}
-                                >
-                                    {isActive && (
-                                        <motion.span
-                                            layoutId="pill-indicator"
-                                            className="absolute inset-0 bg-primary/10 rounded-xl"
-                                            transition={{
-                                                type: 'spring',
-                                                stiffness: 380,
-                                                damping: 30,
-                                            }}
-                                        />
-                                    )}
-                                    <span className="relative z-10">{link.label}</span>
-                                </button>
-                            );
-                        })}
-                    </nav>
-
-                    <button
-                        className="md:hidden ml-1 p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors cursor-pointer"
-                        onClick={() => setMobileOpen((v) => !v)}
-                        aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
-                    >
-                        <AnimatePresence mode="wait" initial={false}>
-                            {mobileOpen ? (
-                                <motion.span
-                                    key="x"
-                                    initial={{ rotate: -90, opacity: 0 }}
-                                    animate={{ rotate: 0, opacity: 1 }}
-                                    exit={{ rotate: 90, opacity: 0 }}
-                                    transition={{ duration: 0.15 }}
-                                >
-                                    <X size={17} />
-                                </motion.span>
-                            ) : (
-                                <motion.span
-                                    key="menu"
-                                    initial={{ rotate: 90, opacity: 0 }}
-                                    animate={{ rotate: 0, opacity: 1 }}
-                                    exit={{ rotate: -90, opacity: 0 }}
-                                    transition={{ duration: 0.15 }}
-                                >
-                                    <Menu size={17} />
-                                </motion.span>
-                            )}
-                        </AnimatePresence>
-                    </button>
-                </div>
-
-                {/* Mobile dropdown */}
-                <AnimatePresence>
-                    {mobileOpen && (
-                        <motion.nav
-                            initial={{ opacity: 0, y: -8, scale: 0.96 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -8, scale: 0.96 }}
-                            transition={{ duration: 0.18, ease: 'easeOut' }}
-                            className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-52 flex flex-col gap-0.5 p-2 rounded-2xl border border-border bg-card/95 backdrop-blur-xl shadow-lg shadow-black/30"
+                        <button
+                            onClick={() => {
+                                setMobileOpen(false);
+                                if (!isHome) {
+                                    window.location.href = '/';
+                                } else {
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                }
+                            }}
+                            className="flex items-center gap-2 group cursor-pointer"
+                            aria-label="Topo"
                         >
+                            {/* Logo Mobile */}
+                            <div className="flex md:hidden items-center gap-2 font-bold text-lg tracking-tight">
+                                <span className="size-7 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs shrink-0">
+                                    FM
+                                </span>
+                                <span className="text-foreground">FelipeFMedeiros</span>
+                            </div>
+
+                            {/* Logo Desktop */}
+                            <span className="hidden md:flex size-7 rounded-lg bg-primary items-center justify-center text-primary-foreground font-bold text-xs shrink-0">
+                                FM
+                            </span>
+                            <span className="hidden md:block text-sm font-semibold text-foreground group-hover:text-primary transition-colors pr-1">
+                                Felipe
+                            </span>
+                        </button>
+
+                        <div className="hidden md:block w-px h-4 bg-border mx-1 shrink-0" />
+
+                        <nav className="hidden md:flex items-center gap-0.5">
                             {NAV_LINKS.map((link) => {
                                 const isActive = activeSection === link.href.slice(1);
                                 return (
@@ -177,20 +131,95 @@ export default function Header() {
                                         key={link.href}
                                         onClick={() => handleNavClick(link.href)}
                                         className={cn(
-                                            'w-full text-left px-3 py-2 text-sm font-medium rounded-xl transition-colors cursor-pointer',
+                                            'relative px-3 py-1.5 text-sm font-medium rounded-xl transition-colors cursor-pointer',
+                                            isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
+                                        )}
+                                    >
+                                        {isActive && (
+                                            <motion.span
+                                                layoutId="pill-indicator"
+                                                className="absolute inset-0 bg-primary/10 rounded-xl"
+                                                transition={{
+                                                    type: 'spring',
+                                                    stiffness: 380,
+                                                    damping: 30,
+                                                }}
+                                            />
+                                        )}
+                                        <span className="relative z-10">{link.label}</span>
+                                    </button>
+                                );
+                            })}
+                        </nav>
+
+                        <button
+                            className="md:hidden p-1.5 rounded-lg text-foreground hover:bg-secondary/60 transition-colors cursor-pointer relative z-50"
+                            onClick={() => setMobileOpen((v) => !v)}
+                            aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
+                        >
+                            <AnimatePresence mode="wait" initial={false}>
+                                {mobileOpen ? (
+                                    <motion.span
+                                        key="x"
+                                        initial={{ rotate: -90, opacity: 0 }}
+                                        animate={{ rotate: 0, opacity: 1 }}
+                                        exit={{ rotate: 90, opacity: 0 }}
+                                        transition={{ duration: 0.15 }}
+                                        className="block"
+                                    >
+                                        <X size={24} />
+                                    </motion.span>
+                                ) : (
+                                    <motion.span
+                                        key="menu"
+                                        initial={{ rotate: 90, opacity: 0 }}
+                                        animate={{ rotate: 0, opacity: 1 }}
+                                        exit={{ rotate: -90, opacity: 0 }}
+                                        transition={{ duration: 0.15 }}
+                                        className="block"
+                                    >
+                                        <Menu size={24} />
+                                    </motion.span>
+                                )}
+                            </AnimatePresence>
+                        </button>
+                    </div>
+                </div>
+            </motion.header>
+
+            {/* Mobile Full Screen Menu */}
+            <AnimatePresence>
+                {mobileOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="fixed inset-0 z-40 bg-background/95 backdrop-blur-xl flex flex-col items-center justify-center md:hidden"
+                    >
+                        <nav className="flex flex-col items-center gap-6 w-full px-6">
+                            {NAV_LINKS.map((link) => {
+                                const isActive = activeSection === link.href.slice(1);
+                                return (
+                                    <button
+                                        key={link.href}
+                                        onClick={() => handleNavClick(link.href)}
+                                        className={cn(
+                                            'w-full text-center py-3 text-2xl font-semibold transition-colors cursor-pointer',
                                             isActive
-                                                ? 'text-primary bg-primary/10'
-                                                : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60',
+                                                ? 'text-primary'
+                                                : 'text-muted-foreground hover:text-foreground'
                                         )}
                                     >
                                         {link.label}
                                     </button>
                                 );
                             })}
-                        </motion.nav>
-                    )}
-                </AnimatePresence>
-            </div>
-        </motion.header>
-    );
+                        </nav>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
+    );    
 }
+

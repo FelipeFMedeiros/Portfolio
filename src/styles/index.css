@@ -86,7 +86,7 @@
     }
 
     html {
-        scroll-behavior: smooth;
+        /* Desabilitado o scroll-behavior global para não quebrar a restauração nativa do navegador ao voltar (POP) */
     }
 
     body {
