@@ -2,11 +2,18 @@
 
 import dnaCover from '../assets/projects-images/dna-1.webp';
 import focoqualiCover from '../assets/projects-images/focoquali-1.webp';
+import focoquali2 from '../assets/projects-images/focoquali-2.webp';
+import focoquali3 from '../assets/projects-images/focoquali-3.webp';
+import focoquali4 from '../assets/projects-images/focoquali-4.webp';
 import simmonsCover from '../assets/projects-images/simmons-1.webp';
 import simmons2 from '../assets/projects-images/simmons-2.webp';
 import santoriniCover from '../assets/projects-images/santorini-1.webp';
 import santorini2 from '../assets/projects-images/santorini-2.webp';
-//import poupouCover from '../assets/projects-images/poupou-1.webp';
+import poupouCover from '../assets/projects-images/poupoulegal-1.webp';
+import poupou2 from '../assets/projects-images/poupoulegal-2.webp';
+import poupou3 from '../assets/projects-images/poupoulegal-3.webp';
+import poupou4 from '../assets/projects-images/poupoulegal-4.webp';
+import poupou5 from '../assets/projects-images/poupoulegal-5.webp';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -109,7 +116,12 @@ export const PROJECTS: readonly Project[] = [
         tags: ['React', 'TypeScript', 'TailwindCSS', 'Node.js', 'Express.js', 'Prisma', 'PostgreSQL', 'Zod', 'Swagger'],
         liveUrl: 'https://focoquali.com',
         coverImage: focoqualiCover,
-        screenshots: [{ src: focoqualiCover, caption: 'Tela Principal da Landing Page' }],
+        screenshots: [
+            { src: focoqualiCover, caption: 'Tela Principal da Landing Page' },
+            { src: focoquali3, caption: 'Seção de Avaliações' },
+            { src: focoquali4, caption: 'Seção de Contato' },
+            { src: focoquali2, caption: 'Página de Ebooks' },
+        ],
         year: '2025',
         featured: true,
     },
@@ -175,10 +187,13 @@ export const PROJECTS: readonly Project[] = [
         category: 'freelancer',
         tags: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Docker', 'GitHub Actions'],
         liveUrl: 'https://poupoulegal.com.br',
-        coverImage: '/projects/poupou-1.webp',
+        coverImage: poupouCover,
         screenshots: [
-            { src: '/projects/poupou-1.webp', caption: 'Página Inicial da Plataforma' },
-            { src: '/projects/poupou-2.webp', caption: 'Painel Administrativo' },
+            { src: poupouCover, caption: 'Página Inicial da Plataforma' },
+            { src: poupou2, caption: 'Painel Administrativo' },
+            { src: poupou3, caption: 'Seção de Lojas Parceiras' },
+            { src: poupou5, caption: 'Seção de Sugestão de Ofertas' },
+            { src: poupou4, caption: 'Página de Links' },
         ],
         year: '2025',
         featured: true,
