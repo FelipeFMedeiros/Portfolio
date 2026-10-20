@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { Mail, Linkedin, Check, Copy, ArrowUpRight, ArrowUp } from 'lucide-react';
 import Magnetic from '@/components/ui/Magnetic';
 

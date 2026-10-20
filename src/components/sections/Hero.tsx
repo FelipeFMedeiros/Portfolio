@@ -1,6 +1,8 @@
+import ResponsiveImage from '@/components/ui/ResponsiveImage';
 import { useState, useEffect } from 'react';
 import type { PointerEvent } from 'react';
-import { motion, useMotionValue, useSpring, useReducedMotion } from 'motion/react';
+import { motion, useMotionValue, useSpring } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { Github, Download, ArrowUpRight, Linkedin, ArrowDown, Pause, Play } from 'lucide-react';
 import { SiReact, SiTypescript, SiNodedotjs } from 'react-icons/si';
 import Magnetic from '@/components/ui/Magnetic';
@@ -59,16 +61,16 @@ export default function Hero() {
                 <div className="hero-topline"><span>DESENVOLVEDOR FULL-STACK</span><span className="hidden sm:inline">WEB / MOBILE / SOFTWARE</span></div>
                 <div className="hero-main">
                     <div className="hero-copy">
-                        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="hero-greeting">Olá, eu sou <span>👋</span></motion.p>
+                        <motion.p initial={{ opacity: 1 }} animate={{ opacity: 1 }} className="hero-greeting">Olá, eu sou <span>👋</span></motion.p>
                         <h1 aria-label="Felipe Medeiros" className="hero-name">
                             {['Felipe', 'Medeiros'].map((word, wordIndex) => <span key={word} aria-hidden="true" className="hero-word">
                                 {Array.from(word).map((character, index) => <motion.span key={index} className="inline-block"
-                                    initial={reducedMotion ? false : { y: '105%', opacity: 0, rotate: 6 }} animate={{ y: 0, opacity: 1, rotate: 0 }}
+                                    initial={reducedMotion ? false : { y: '10%', opacity: 1, rotate: 2 }} animate={{ y: 0, opacity: 1, rotate: 0 }}
                                     transition={{ duration: 0.75, delay: 0.12 + wordIndex * 0.16 + index * 0.045, ease: [0.22, 1, 0.36, 1] }}>{character}</motion.span>)}
                                 {wordIndex === 1 && <span className="hero-period">.</span>}
                             </span>)}
                         </h1>
-                        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.6 }}>
+                        <motion.div initial={{ opacity: 1, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.6 }}>
                             <p className="hero-specialty">Desenvolvedor <strong><Typewriter paused={still} /></strong></p>
                             <p className="hero-description">Estudante de Ciência da Computação na <span>UERN</span>, apaixonado por construir soluções web e mobile modernas. Tenho experiência com sistemas de larga escala, integrações mobile e interfaces que encantam.</p>
                             <div className="hero-tech">{TECH_BADGES.map((tech) => <span key={tech}>{tech}</span>)}</div>
@@ -82,17 +84,17 @@ export default function Hero() {
                             </div>
                         </motion.div>
                     </div>
-                    <motion.div className="hero-portrait-stage" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.35 }}>
+                    <motion.div className="hero-portrait-stage" initial={{ opacity: 1 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.35 }}>
                         <motion.div className="hero-portrait-tilt" style={{ rotateX: pointerEffects && !still ? rotateX : 0, rotateY: pointerEffects && !still ? rotateY : 0, transformStyle: 'preserve-3d' }}>
                             <span aria-hidden="true" className="portrait-cross cross-top">+</span><span aria-hidden="true" className="portrait-cross cross-bottom">+</span>
                             <svg aria-hidden="true" viewBox="0 0 460 460" className="portrait-orbit orbit-one"><circle cx="230" cy="230" r="216" /><circle cx="230" cy="14" r="4" className="orbit-dot" /></svg>
                             <svg aria-hidden="true" viewBox="0 0 460 460" className="portrait-orbit orbit-two"><ellipse cx="230" cy="230" rx="226" ry="163" /><circle cx="456" cy="230" r="3" className="orbit-dot" /></svg>
                             <div className="portrait-photo-wrap">
-                                {imgError ? <div className="portrait-fallback">FM</div> : <img src="/profile.webp" alt="Felipe Medeiros" width="400" height="400" fetchPriority="high" onError={() => setImgError(true)} />}
+                                {imgError ? <div className="portrait-fallback">FM</div> : <ResponsiveImage sizes="(max-width: 767px) 60vw, (max-width: 1023px) 238px, 322px" src="/profile.webp" alt="Felipe Medeiros" width="400" height="400" fetchPriority="high" onError={() => setImgError(true)} />}
                             </div>
-                            <div className="orbit-badge badge-react"><SiReact size={21} /><span>React</span></div>
-                            <div className="orbit-badge badge-node"><SiNodedotjs size={20} /><span>Node.js</span></div>
-                            <div className="orbit-badge badge-ts"><SiTypescript size={18} /><span>TypeScript</span></div>
+                            <div className="orbit-badge badge-react"><SiReact aria-hidden="true" size={21} /><span>React</span></div>
+                            <div className="orbit-badge badge-node"><SiNodedotjs aria-hidden="true" size={20} /><span>Node.js</span></div>
+                            <div className="orbit-badge badge-ts"><SiTypescript aria-hidden="true" size={18} /><span>TypeScript</span></div>
                             <div className="portrait-caption"><span className="status-dot" /><div><span>Experiência</span><strong>+2 anos</strong></div><span aria-hidden="true" className="portrait-code">&lt;/&gt;</span></div>
                         </motion.div>
                     </motion.div>

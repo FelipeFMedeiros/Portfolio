@@ -25,3 +25,5 @@ dist-ssr
 
 bundle-analysis.html
 .reports/
+.prerender/
+public/generated/

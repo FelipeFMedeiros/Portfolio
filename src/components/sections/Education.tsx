@@ -1,5 +1,7 @@
+import ResponsiveImage from '@/components/ui/ResponsiveImage';
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { motion, useInView, AnimatePresence, useReducedMotion } from 'motion/react';
+import { motion, useInView, AnimatePresence } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import type { Variants } from 'motion/react';
 import { Award, ChevronLeft, ChevronRight, ExternalLink, MapPin, Calendar, Maximize2 } from 'lucide-react';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -142,7 +144,7 @@ export default function Education() {
                     <div className="flex flex-col sm:flex-row gap-5 md:gap-6 items-start mb-7 md:mb-8">
                         {/* Logo */}
                         <div className="shrink-0 size-16 md:size-20 rounded-2xl bg-[#104A90] overflow-hidden flex items-center justify-center p-2 border border-border/30">
-                            <img src="/uern-logo.png" alt="UERN" className="size-full object-contain" />
+                            <ResponsiveImage sizes="64px" src="/uern-logo.png" loading="lazy" alt="UERN" className="size-full object-contain" />
                         </div>
 
                         {/* Info */}
@@ -247,7 +249,7 @@ export default function Education() {
                                 <div className="certificate-image">
                                     {cert.imageUrl ? (
                                         <button onClick={() => setPreview(cert)} aria-label={`Ampliar certificado: ${cert.title}`}>
-                                            <img
+                                            <ResponsiveImage sizes="(max-width: 767px) 290px, 320px"
                                                 src={cert.imageUrl}
                                                 alt={cert.title}
                                                 className="w-full h-full object-cover"

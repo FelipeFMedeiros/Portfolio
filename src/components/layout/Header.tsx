@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { MouseEvent } from 'react';
-import { motion, AnimatePresence, useReducedMotion, useScroll } from 'motion/react';
+import { motion, AnimatePresence, useScroll } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { Menu, X, Sun, Moon, ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -87,12 +88,13 @@ export default function Header() {
 
     return (
         <>
-            <motion.header initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}
+            <motion.header initial={{ opacity: 1, y: -8 }} animate={{ opacity: 1, y: 0 }}
                 className="site-header">
                 <div className={cn('header-glass', scrolled && 'is-scrolled')}>
-                    <a href="#hero" onClick={(event) => navigate(event, '#hero')} className="brand" aria-label="FelipeFMedeiros — Topo">
-                        <span className="brand-mark">f<span>.</span>m</span>
+                    <a href="#hero" onClick={(event) => navigate(event, '#hero')} className="brand">
+                        <span className="brand-mark" aria-hidden="true">f<span>.</span>m</span>
                         <span className="brand-name">Felipe<span className="text-primary">.</span></span>
+                        <span className="sr-only"> Medeiros — voltar ao topo</span>
                     </a>
                     <nav aria-label="Navegação principal" className="desktop-nav">
                         {NAV_LINKS.map((link) => {

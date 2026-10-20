@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useReducedMotion } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 export function usePointerEffects() {
     const reducedMotion = useReducedMotion();

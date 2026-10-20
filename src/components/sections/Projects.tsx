@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import ResponsiveImage from '@/components/ui/ResponsiveImage';
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { ArrowUpRight, Github, Layers } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -22,19 +24,19 @@ function ProjectCard({ project }: { project: Project }) {
     const number = String(PROJECTS.indexOf(project) + 1).padStart(2, '0');
     return (
         <InteractiveSurface tilt className="project-card group">
-            <Link to={`/projects/${project.slug}`} state={{ fromPortfolio: true }} aria-label={`Explorar projeto: ${project.title}`} className={cn('project-cover bg-linear-to-br', styles.gradient)}>
-                {project.coverImage ? <img src={project.coverImage} alt={`Capa do projeto ${project.title}`} loading="lazy" width="800" height="500" /> : <Layers size={38} className="text-primary" />}
+            <Link to={`/projects/${project.slug}/`} state={{ fromPortfolio: true }} aria-label={`${number} / Explorar projeto: ${project.title}`} className={cn('project-cover bg-linear-to-br', styles.gradient)}>
+                {project.coverImage ? <ResponsiveImage sizes="(max-width: 767px) calc(100vw - 40px), (min-width: 1280px) 660px, 55vw" src={project.coverImage} alt={`Capa do projeto ${project.title}`} loading="lazy" width="800" height="500" /> : <Layers size={38} className="text-primary" />}
                 <div className="project-image-shade" />
                 <span className="project-number" aria-hidden="true">{number} /</span>
                 <span className="project-explore">Explorar projeto<ArrowUpRight size={18} /></span>
             </Link>
             <div className="project-body">
                 <div className="project-meta"><span className={cn('rounded-full border px-2.5 py-1 text-[10px]', styles.badge)}>{CATEGORY_LABELS[project.category]}</span><span>{project.year}</span></div>
-                <h3><Link to={`/projects/${project.slug}`} state={{ fromPortfolio: true }}>{project.title}</Link></h3>
+                <h3><Link to={`/projects/${project.slug}/`} state={{ fromPortfolio: true }}>{project.title}</Link></h3>
                 <p>{project.tagline}</p>
                 <div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
                 <div className="project-actions">
-                    <Link to={`/projects/${project.slug}`} state={{ fromPortfolio: true }} className="project-detail-link" aria-label={`Ver Detalhes: ${project.title}`}>Ver Detalhes<ArrowUpRight size={17} /></Link>
+                    <Link to={`/projects/${project.slug}/`} state={{ fromPortfolio: true }} className="project-detail-link" aria-label={`Ver Detalhes: ${project.title}`}>Ver Detalhes<ArrowUpRight size={17} /></Link>
                     {project.repoUrl && <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" aria-label={`Repositório de ${project.title}`}><Github size={17} /></a>}
                     {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`Ver ${project.title} online`}><ArrowUpRight size={17} /></a>}
                 </div>
@@ -44,16 +46,19 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 export default function Projects() {
-    const [activeFilter, setActiveFilter] = useState<FilterTab>(() => {
-        const saved = window.sessionStorage.getItem('portfolio-project-filter');
-        return ALL_TABS.some((tab) => tab.value === saved && (saved === 'todos' || PROJECTS.some((project) => project.category === saved))) ? saved as FilterTab : 'todos';
-    });
+    const [activeFilter, setActiveFilter] = useState<FilterTab>('todos');
+    useEffect(() => {
+        try {
+            const saved = window.sessionStorage.getItem('portfolio-project-filter');
+            if (ALL_TABS.some((tab) => tab.value === saved && (saved === 'todos' || PROJECTS.some((project) => project.category === saved)))) setActiveFilter(saved as FilterTab);
+        } catch { /* O filtro continua disponível sem armazenamento do navegador. */ }
+    }, []);
     const reducedMotion = useReducedMotion();
     const tabs = ALL_TABS.filter((tab) => tab.value === 'todos' || PROJECTS.some((project) => project.category === tab.value));
     const filtered = activeFilter === 'todos' ? PROJECTS : PROJECTS.filter((project) => project.category === activeFilter);
     const selectFilter = (value: FilterTab) => {
         setActiveFilter(value);
-        window.sessionStorage.setItem('portfolio-project-filter', value);
+        try { window.sessionStorage.setItem('portfolio-project-filter', value); } catch { /* Preferência apenas nesta página. */ }
     };
 
     return (

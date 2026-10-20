@@ -1,0 +1,35 @@
+name: Quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+      - run: bun run build
+      - run: bun run test:build
+      - name: Browser checks against production
+        shell: bash
+        run: |
+          mkdir -p .reports
+          bun run preview --host localhost --port 4173 --strictPort > .reports/preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid"' EXIT
+          bun -e "for(let attempt=0;attempt<60;attempt++){try{if((await fetch('http://localhost:4173/')).ok)process.exit(0)}catch{}await Bun.sleep(250)}process.exit(1)"
+          bun run test:browser

@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import type { ComponentType, CSSProperties } from 'react';
-import { motion, useInView, useReducedMotion } from 'motion/react';
+import { motion, useInView } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import type { Variants } from 'motion/react';
 import { Database } from 'lucide-react';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -248,7 +249,7 @@ export default function Skills() {
                                 <motion.div className="stack-items" initial="rest" whileHover={pointerEffects ? 'wave' : undefined}>
                                     {items.map(({ name, icon: Icon, color }, index) => <motion.div key={name} className="tech-item"
                                         variants={{ rest: { y: 0, scale: 1, transition: { duration: 0.3 } }, wave: { y: -3, scale: 1.025, transition: { delay: index * 0.035, type: 'spring', stiffness: 300, damping: 18 } } }}>
-                                        <Icon size={15} style={{ color: color === '#000000' ? 'currentColor' : color ?? 'currentColor' }} />{name}
+                                        <Icon aria-hidden="true" size={15} style={{ color: color === '#000000' ? 'currentColor' : color ?? 'currentColor' }} />{name}
                                     </motion.div>)}
                                 </motion.div>
                             </motion.div>)}

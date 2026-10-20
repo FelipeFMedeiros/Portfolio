@@ -1,3 +1,4 @@
+import ResponsiveImage from '@/components/ui/ResponsiveImage';
 import { useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
@@ -38,7 +39,7 @@ export default function ImagePreview({ image, title, href, linkLabel = 'Ver Cert
                 exit={{ opacity: 0, y: 10 }} className="image-preview">
                 <div className="image-preview-header"><h3 id={titleId}>{title}</h3>
                     <button onClick={onClose} aria-label="Fechar visualização" className="header-icon"><X size={20} /></button></div>
-                <img src={image} alt={title} />
+                <ResponsiveImage sizes="(min-width: 1050px) 1000px, 95vw" src={image} alt={title} />
                 {href && <a href={href} target="_blank" rel="noopener noreferrer" className="image-preview-link">{linkLabel}<ArrowUpRight size={16} /></a>}
             </motion.div>
         </motion.div>, document.body,

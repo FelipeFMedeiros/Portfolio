@@ -1,5 +1,6 @@
 import { useRef } from 'react';
-import { motion, useInView, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { motion, useInView, useScroll, useTransform } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import type { Variants } from 'motion/react';
 import { MapPin, Calendar } from 'lucide-react';
 import SectionHeading from '@/components/ui/SectionHeading';

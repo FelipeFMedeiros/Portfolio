@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion, useInView, useReducedMotion } from 'motion/react';
+import { motion, useInView } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import type { Variants } from 'motion/react';
 import { Code2, GraduationCap, Rocket } from 'lucide-react';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -42,11 +43,12 @@ const staggerContainer: Variants = {
 // ── Counter helpers ───────────────────────────────────────────────────────────
 
 function useCountUp(target: number, isActive: boolean, duration = 1600) {
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(target);
     const reducedMotion = useReducedMotion();
 
     useEffect(() => {
-        if (!isActive || reducedMotion) return;
+        if (reducedMotion) return;
+        if (!isActive) { setCount(0); return; }
         let startTime: number | null = null;
         let rafId = 0;
 
@@ -77,7 +79,8 @@ function AnimatedCounter({ raw }: { raw: string }) {
     const { prefix, number, suffix } = parseStatValue(raw);
     const count = useCountUp(number, isActive);
     return (
-        <span ref={ref} className="about-counter" aria-label={raw}>
+        <span ref={ref} className="about-counter">
+            <span className="sr-only">{raw}</span>
             <span aria-hidden="true">
             {prefix}
             {count}
