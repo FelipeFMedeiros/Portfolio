@@ -9,7 +9,7 @@ import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
     plugins: [
         react({
             babel: {
@@ -17,7 +17,7 @@ export default defineConfig({
             },
         }),
         tailwindcss(),
-        visualizer({ open: false, filename: 'bundle-analysis.html' }),
+        ...(mode === 'analyze' ? [visualizer({ open: false, filename: path.resolve('.reports/bundle.html') })] : []),
     ],
     server: {
         port: 5173,
@@ -47,4 +47,4 @@ export default defineConfig({
             },
         },
     },
-});
+}));
