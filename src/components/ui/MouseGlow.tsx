@@ -1,19 +1,25 @@
-import { useRef, useEffect } from 'react';
+import { useEffect } from 'react';
+import { motion, useMotionValue, useSpring } from 'motion/react';
+import { usePointerEffects } from '@/hooks/usePointerEffects';
 
 export default function MouseGlow() {
-    const ref = useRef<HTMLDivElement>(null);
+    const enabled = usePointerEffects();
+    const targetX = useMotionValue(-1000);
+    const targetY = useMotionValue(-1000);
+    const x = useSpring(targetX, { stiffness: 70, damping: 25 });
+    const y = useSpring(targetY, { stiffness: 70, damping: 25 });
 
     useEffect(() => {
-        const el = ref.current;
-        if (!el) return;
-
-        const handleMouseMove = (e: MouseEvent) => {
-            el.style.background = `radial-gradient(700px circle at ${e.clientX}px ${e.clientY}px, oklch(0.76 0.15 207 / 0.07), transparent 50%)`;
+        if (!enabled) return;
+        const handleMouseMove = (event: PointerEvent) => {
+            targetX.set(event.clientX - 350);
+            targetY.set(event.clientY - 350);
         };
 
-        window.addEventListener('mousemove', handleMouseMove, { passive: true });
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
+        window.addEventListener('pointermove', handleMouseMove, { passive: true });
+        return () => window.removeEventListener('pointermove', handleMouseMove);
+    }, [enabled, targetX, targetY]);
 
-    return <div ref={ref} className="pointer-events-none fixed inset-0 z-30" />;
+    if (!enabled) return null;
+    return <motion.div aria-hidden="true" className="mouse-glow" style={{ x, y }} />;
 }
