@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
 import type { ComponentType, CSSProperties } from 'react';
-import { motion, useInView } from 'framer-motion';
-import type { Variants } from 'framer-motion';
+import { motion, useInView, useReducedMotion } from 'motion/react';
+import type { Variants } from 'motion/react';
 import { Database } from 'lucide-react';
+import SectionHeading from '@/components/ui/SectionHeading';
+import { usePointerEffects } from '@/hooks/usePointerEffects';
 import {
     SiReact,
     SiTypescript,
@@ -169,11 +171,6 @@ const dataPoly = dataCoords.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).jo
 
 // ── Framer Motion variants ────────────────────────────────────────────────────
 
-const fadeUp: Variants = {
-    hidden: { opacity: 0, y: 32 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
-};
-
 const stagger: Variants = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.08 } },
@@ -186,235 +183,77 @@ const rowFade: Variants = {
 
 // ── RadarChart ────────────────────────────────────────────────────────────────
 
-function RadarChart({ isInView }: { isInView: boolean }) {
-    const [hovered, setHovered] = useState<number | null>(null);
+function RadarChart() {
+    const chartRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(chartRef, { once: true, amount: 0.35 });
+    const reducedMotion = useReducedMotion();
+    const [selected, setSelected] = useState<number | null>(null);
+    const centerPoly = RADAR_SKILLS.map(() => `${CX},${CY}`).join(' ');
 
     return (
-        <svg
-            viewBox="0 0 500 500"
-            className="w-full h-auto max-w-105 mx-auto block select-none"
-            aria-label="Gráfico radar de habilidades"
-        >
-            {/* ── Background rings ── */}
-            {ringPolys.map((pts, ri) => (
-                <polygon key={ri} points={pts} fill="none" stroke="oklch(0.28 0.01 264)" strokeWidth={1} />
-            ))}
-
-            {/* ── Axis lines ── */}
-            {RADAR_SKILLS.map((_, i) => {
-                const end = pt(i, MAX_R);
-                return (
-                    <line key={i} x1={CX} y1={CY} x2={end.x} y2={end.y} stroke="oklch(0.28 0.01 264)" strokeWidth={1} />
-                );
-            })}
-
-            {/* ── Ring % hints ── */}
-            {[0.25, 0.5, 0.75].map((r) => (
-                <text
-                    key={r}
-                    x={CX + 4}
-                    y={CY - MAX_R * r - 3}
-                    fontSize="9"
-                    fill="oklch(0.42 0.01 264)"
-                    fontFamily="Inter, sans-serif"
-                >
-                    {Math.round(r * 100)}%
-                </text>
-            ))}
-
-            {/* ── Data polygon (animated) ── */}
-            <motion.g
-                initial={{ opacity: 0, scale: 0.15 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.9, ease: 'easeOut', delay: 0.3 }}
-                style={{ transformOrigin: `${CX}px ${CY}px` }}
-            >
-                <polygon
-                    points={dataPoly}
-                    fill="oklch(0.76 0.15 207 / 0.10)"
-                    stroke="oklch(0.76 0.15 207 / 0.65)"
-                    strokeWidth={1.8}
-                    strokeLinejoin="round"
-                />
-            </motion.g>
-
-            {/* ── Vertex dots ── */}
-            {dataCoords.map((coord, i) => (
-                <motion.circle
-                    key={i}
-                    cx={coord.x}
-                    cy={coord.y}
-                    r={5.5}
-                    strokeWidth={8}
-                    className="fill-primary stroke-transparent hover:stroke-primary/30 transition-all duration-200 cursor-crosshair"
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ delay: 0.55 + i * 0.07, duration: 0.3 }}
-                    onMouseEnter={() => setHovered(i)}
-                    onMouseLeave={() => setHovered(null)}
-                />
-            ))}
-
-            {/* ── Tooltip ── */}
-            {hovered !== null &&
-                (() => {
-                    const coord = dataCoords[hovered];
-                    const sin = Math.sin(angle(hovered));
-                    const W = 46,
-                        H = 24;
-                    const ty =
-                        sin < 0
-                            ? coord.y + 10 // dot in upper half → tooltip below
-                            : coord.y - H - 10; // dot in lower half → tooltip above
-                    return (
-                        <g pointerEvents="none">
-                            <rect
-                                x={coord.x - W / 2}
-                                y={ty}
-                                width={W}
-                                height={H}
-                                rx={6}
-                                fill="oklch(0.13 0.01 264)"
-                                stroke="oklch(0.76 0.15 207 / 0.45)"
-                                strokeWidth={1}
-                            />
-                            <text
-                                x={coord.x}
-                                y={ty + H / 2}
-                                textAnchor="middle"
-                                dominantBaseline="middle"
-                                fill="oklch(0.76 0.15 207)"
-                                fontSize="11"
-                                fontWeight="600"
-                                fontFamily="Inter, sans-serif"
-                            >
-                                {RADAR_SKILLS[hovered].value}%
-                            </text>
-                        </g>
-                    );
-                })()}
-
-            {/* ── Axis labels ── */}
-            {RADAR_SKILLS.map((skill, i) => {
-                const a = angle(i);
-                const lx = CX + LABEL_R * Math.cos(a);
-                const ly = CY + LABEL_R * Math.sin(a);
-                const cos = Math.cos(a);
-                const anchor: 'start' | 'middle' | 'end' = cos < -0.3 ? 'end' : cos > 0.3 ? 'start' : 'middle';
-
-                return (
-                    <text
-                        key={i}
-                        textAnchor={anchor}
-                        fill="oklch(0.78 0.01 264)"
-                        className="text-[13.5px]"
-                        fontWeight="500"
-                        fontFamily="Inter, sans-serif"
-                    >
-                        {skill.lines.map((line, j) => (
-                            <tspan
-                                key={j}
-                                x={lx}
-                                y={j === 0 ? ly - ((skill.lines.length - 1) * LINE_H) / 2 : undefined}
-                                dy={j === 0 ? '0.35em' : LINE_H}
-                            >
-                                {line}
-                            </tspan>
-                        ))}
-                    </text>
-                );
-            })}
-        </svg>
+        <div ref={chartRef} className="radar-panel">
+            <p className="skills-label">Visão Geral</p>
+            <svg viewBox="0 0 500 500" className="radar-chart" role="img" aria-labelledby="radar-title radar-description">
+                <title id="radar-title">Gráfico radar de habilidades</title>
+                <desc id="radar-description">{RADAR_SKILLS.map((skill) => `${skill.label}: ${skill.value}%`).join('; ')}</desc>
+                {ringPolys.map((points, index) => <polygon key={index} points={points} fill="none" stroke="var(--border)" strokeWidth={1} />)}
+                {RADAR_SKILLS.map((_, index) => {
+                    const end = pt(index, MAX_R);
+                    return <line key={index} x1={CX} y1={CY} x2={end.x} y2={end.y} stroke="var(--border)" strokeWidth={1} />;
+                })}
+                {[0.25, 0.5, 0.75].map((ring) => <text key={ring} x={CX + 4} y={CY - MAX_R * ring - 3} fontSize="9" fill="var(--muted-foreground)" fontFamily="var(--font-mono)">{Math.round(ring * 100)}%</text>)}
+                <motion.polygon initial={{ points: reducedMotion ? dataPoly : centerPoly, opacity: 0 }}
+                    animate={isInView ? { points: dataPoly, opacity: 1 } : {}}
+                    transition={{ duration: reducedMotion ? 0 : 1.2, ease: [0.22, 1, 0.36, 1] }}
+                    fill="color-mix(in srgb, var(--primary) 13%, transparent)" stroke="var(--primary)" strokeWidth={1.8} strokeLinejoin="round" />
+                {dataCoords.map((coordinate, index) => <motion.circle key={index}
+                    initial={{ cx: reducedMotion ? coordinate.x : CX, cy: reducedMotion ? coordinate.y : CY, opacity: 0 }}
+                    animate={isInView ? { cx: coordinate.x, cy: coordinate.y, opacity: 1, r: selected === index ? 7 : 4 } : {}}
+                    transition={{ duration: reducedMotion ? 0 : 1, ease: 'easeOut' }}
+                    fill="var(--primary)" stroke="var(--card)" strokeWidth={2} />)}
+                {RADAR_SKILLS.map((skill, index) => {
+                    const a = angle(index);
+                    const lx = CX + LABEL_R * Math.cos(a);
+                    const ly = CY + LABEL_R * Math.sin(a);
+                    const cos = Math.cos(a);
+                    const anchor = cos < -0.3 ? 'end' : cos > 0.3 ? 'start' : 'middle';
+                    return <text key={skill.label} textAnchor={anchor} fill={selected === index ? 'var(--primary)' : 'var(--muted-foreground)'} fontSize={13.5} fontFamily="var(--font-display)">
+                        {skill.lines.map((line, j) => <tspan key={line} x={lx} y={j === 0 ? ly - ((skill.lines.length - 1) * LINE_H) / 2 : undefined} dy={j === 0 ? '0.35em' : LINE_H}>{line}</tspan>)}
+                    </text>;
+                })}
+            </svg>
+            <div className="radar-values" aria-label="Valores das habilidades">
+                {RADAR_SKILLS.map((skill, index) => <button key={skill.label} onClick={() => setSelected(selected === index ? null : index)}
+                    aria-pressed={selected === index} className={selected === index ? 'is-selected' : ''}>
+                    <span>{skill.label}</span><strong>{skill.value}<span>%</span></strong>
+                </button>)}
+            </div>
+        </div>
     );
 }
 
-// ── Skills (main export) ──────────────────────────────────────────────────────
-
 export default function Skills() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
-
+    const pointerEffects = usePointerEffects();
     return (
-        <section ref={sectionRef} id="habilidades" className="relative py-24 overflow-hidden">
-            {/* Section separator */}
-            <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
-
-            <div className="max-w-6xl mx-auto px-6">
-                {/* ── Heading ── */}
-                <motion.div
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate={isInView ? 'visible' : 'hidden'}
-                    className="mb-14"
-                >
-                    <span className="text-primary text-sm font-medium tracking-[0.2em] uppercase mb-3 block">
-                        Habilidades
-                    </span>
-                    <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                        Minhas <span className="text-gradient-cyan">Skills</span>
-                    </h2>
-                </motion.div>
-
-                {/* ── Radar block ── */}
-                <div className="mb-16">
-                    <motion.p
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate={isInView ? 'visible' : 'hidden'}
-                        className="text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground mb-8"
-                    >
-                        Visão Geral
-                    </motion.p>
-
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={isInView ? { opacity: 1 } : {}}
-                        transition={{ duration: 0.4 }}
-                    >
-                        <RadarChart isInView={isInView} />
-                    </motion.div>
-                </div>
-
-                {/* ── Tech stack block ── */}
-                <div>
-                    <motion.p
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate={isInView ? 'visible' : 'hidden'}
-                        className="text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground mb-6"
-                    >
-                        Tech Stack
-                    </motion.p>
-
-                    <motion.div
-                        variants={stagger}
-                        initial="hidden"
-                        animate={isInView ? 'visible' : 'hidden'}
-                        className="flex flex-col divide-y divide-border rounded-2xl border border-border overflow-hidden"
-                    >
-                        {STACK.map(({ category, items }) => (
-                            <motion.div
-                                key={category}
-                                variants={rowFade}
-                                className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-6 px-5 py-4 bg-card hover:bg-primary/5 transition-colors duration-200"
-                            >
-                                <span className="sm:w-32 shrink-0 text-xs font-semibold tracking-[0.12em] uppercase text-muted-foreground sm:pt-1.5">
-                                    {category}
-                                </span>
-                                <div className="flex flex-wrap gap-2">
-                                    {items.map(({ name, icon: Icon, color }) => (
-                                        <div
-                                            key={name}
-                                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background border border-border text-sm font-medium text-foreground hover:border-primary/40 hover:bg-primary/5 transition-all duration-200 cursor-default"
-                                        >
-                                            <Icon size={14} style={{ color: color ?? 'currentColor' }} />
-                                            {name}
-                                        </div>
-                                    ))}
-                                </div>
-                            </motion.div>
-                        ))}
-                    </motion.div>
+        <section id="habilidades" className="section-shell skills-section">
+            <div className="content-shell">
+                <SectionHeading number="04" eyebrow="Habilidades">Minhas <span>Skills.</span></SectionHeading>
+                <div className="skills-layout">
+                    <RadarChart />
+                    <div className="skills-stack">
+                        <p className="skills-label">Tech Stack</p>
+                        <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }}>
+                            {STACK.map(({ category, items }, categoryIndex) => <motion.div key={category} variants={rowFade} className="stack-category">
+                                <div className="stack-category-label"><span>0{categoryIndex + 1}</span><h3>{category}</h3><span>{String(items.length).padStart(2, '0')}</span></div>
+                                <motion.div className="stack-items" initial="rest" whileHover={pointerEffects ? 'wave' : undefined}>
+                                    {items.map(({ name, icon: Icon, color }, index) => <motion.div key={name} className="tech-item"
+                                        variants={{ rest: { y: 0, scale: 1, transition: { duration: 0.3 } }, wave: { y: -3, scale: 1.025, transition: { delay: index * 0.035, type: 'spring', stiffness: 300, damping: 18 } } }}>
+                                        <Icon size={15} style={{ color: color === '#000000' ? 'currentColor' : color ?? 'currentColor' }} />{name}
+                                    </motion.div>)}
+                                </motion.div>
+                            </motion.div>)}
+                        </motion.div>
+                    </div>
                 </div>
             </div>
         </section>
