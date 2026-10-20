@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion, useInView } from 'framer-motion';
-import type { Variants } from 'framer-motion';
+import { motion, useInView, useReducedMotion } from 'motion/react';
+import type { Variants } from 'motion/react';
 import { Code2, GraduationCap, Rocket } from 'lucide-react';
+import SectionHeading from '@/components/ui/SectionHeading';
+import InteractiveSurface from '@/components/ui/InteractiveSurface';
 
 const STATS = [
     { value: '20k+', label: 'Vidas impactadas' },
@@ -41,9 +43,10 @@ const staggerContainer: Variants = {
 
 function useCountUp(target: number, isActive: boolean, duration = 1600) {
     const [count, setCount] = useState(0);
+    const reducedMotion = useReducedMotion();
 
     useEffect(() => {
-        if (!isActive) return;
+        if (!isActive || reducedMotion) return;
         let startTime: number | null = null;
         let rafId = 0;
 
@@ -57,9 +60,9 @@ function useCountUp(target: number, isActive: boolean, duration = 1600) {
 
         rafId = requestAnimationFrame(step);
         return () => cancelAnimationFrame(rafId);
-    }, [isActive, target, duration]);
+    }, [isActive, target, duration, reducedMotion]);
 
-    return count;
+    return reducedMotion ? target : count;
 }
 
 function parseStatValue(raw: string) {
@@ -68,14 +71,18 @@ function parseStatValue(raw: string) {
     return { prefix: match[1], number: parseInt(match[2], 10), suffix: match[3] };
 }
 
-function AnimatedCounter({ raw, isActive }: { raw: string; isActive: boolean }) {
+function AnimatedCounter({ raw }: { raw: string }) {
+    const ref = useRef<HTMLSpanElement>(null);
+    const isActive = useInView(ref, { once: true, amount: 0.8 });
     const { prefix, number, suffix } = parseStatValue(raw);
     const count = useCountUp(number, isActive);
     return (
-        <span className="text-3xl font-extrabold text-gradient-cyan leading-none">
+        <span ref={ref} className="about-counter" aria-label={raw}>
+            <span aria-hidden="true">
             {prefix}
             {count}
             {suffix}
+            </span>
         </span>
     );
 }
@@ -85,34 +92,22 @@ export default function About() {
     const isInView = useInView(ref, { once: true, margin: '-80px' });
 
     return (
-        <section ref={ref} id="sobre" className="relative py-24 overflow-hidden">
+        <section ref={ref} id="sobre" className="section-shell about-section">
             {/* Section separator */}
             <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
-            <div className="max-w-6xl mx-auto px-6">
+            <div className="content-shell">
                 {/* ── Section heading ── */}
-                <motion.div
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate={isInView ? 'visible' : 'hidden'}
-                    className="mb-14"
-                >
-                    <span className="text-primary text-sm font-medium tracking-[0.2em] uppercase mb-3 block">
-                        Quem sou eu
-                    </span>
-                    <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                        Sobre <span className="text-gradient-cyan">mim</span>
-                    </h2>
-                </motion.div>
+                <SectionHeading number="01" eyebrow="Quem sou eu">Sobre <span>mim.</span></SectionHeading>
 
                 {/* ── Main content: text + stats ── */}
-                <div className="grid lg:grid-cols-[1fr,320px] gap-12 xl:gap-16 items-start mb-14">
+                <div className="about-layout">
                     {/* Text */}
                     <motion.div
                         variants={staggerContainer}
                         initial="hidden"
                         animate={isInView ? 'visible' : 'hidden'}
-                        className="flex flex-col gap-5 text-muted-foreground leading-relaxed text-[0.965rem]"
+                        className="about-narrative"
                     >
                         <motion.p variants={fadeUp}>
                             Olá! Sou Felipe, estudante de Ciência da Computação na{' '}
@@ -147,15 +142,15 @@ export default function About() {
                         variants={staggerContainer}
                         initial="hidden"
                         animate={isInView ? 'visible' : 'hidden'}
-                        className="grid grid-cols-2 gap-3"
+                        className="about-stats"
                     >
                         {STATS.map((stat) => (
                             <motion.div
                                 key={stat.label}
                                 variants={fadeUp}
-                                className="bg-card border border-border rounded-2xl p-5 flex flex-col gap-1.5 hover:border-primary/40 transition-colors duration-300"
+                                className="about-stat"
                             >
-                                <AnimatedCounter raw={stat.value} isActive={isInView} />
+                                <AnimatedCounter raw={stat.value} />
                                 <span className="text-xs text-muted-foreground leading-snug">{stat.label}</span>
                             </motion.div>
                         ))}
@@ -169,17 +164,19 @@ export default function About() {
                     animate={isInView ? 'visible' : 'hidden'}
                     className="grid sm:grid-cols-3 gap-4"
                 >
-                    {HIGHLIGHTS.map(({ icon: Icon, title, description }) => (
+                    {HIGHLIGHTS.map(({ icon: Icon, title, description }, index) => (
                         <motion.div
                             key={title}
                             variants={fadeUp}
-                            className="bg-card border border-border rounded-2xl p-6 flex flex-col gap-3 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 group"
+                            className="h-full"
                         >
-                            <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
+                            <InteractiveSurface className="highlight-card">
+                            <div className="highlight-topline"><div className="highlight-icon">
                                 <Icon size={20} className="text-primary" />
-                            </div>
+                            </div><span>0{index + 1}</span></div>
                             <h3 className="font-semibold text-foreground">{title}</h3>
                             <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+                            </InteractiveSurface>
                         </motion.div>
                     ))}
                 </motion.div>
