@@ -82,7 +82,7 @@ export default function Header() {
         setMobileOpen(false);
         if (mobileOpen) toggleRef.current?.focus();
         document.getElementById(href.slice(1))?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth' });
-        window.history.replaceState(null, '', href);
+        window.history.replaceState(window.history.state, '', href);
     };
 
     return (

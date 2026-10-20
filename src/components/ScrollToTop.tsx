@@ -1,33 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
 
-/**
- * Gerencia o comportamento do scroll entre páginas e navegação por hash.
- */
+/** Restaura o scroll nativo ao voltar e resolve âncoras depois da montagem do React. */
 export default function ScrollToTop() {
     const { pathname, hash } = useLocation();
     const navType = useNavigationType();
+    const mounted = useRef(false);
 
     useEffect(() => {
-        // Se a navegação for "voltar/avançar" (POP), o navegador manterá a posição de scroll nativamente
-        if (navType === 'POP') {
-            return;
-        }
-
-        // Se houver um hash na URL (ex: /#projetos), leva pra lá de maneira instantânea (não smooth)
-        if (hash) {
-            const id = hash.slice(1);
-            const timer = setTimeout(() => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.scrollIntoView({ behavior: 'auto' });
-                }
-            }, 100);
-            return () => clearTimeout(timer);
-        }
-
-        // Sem hash e não sendo retorno (POP), vai instantaneamente para o topo
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        const initialNavigation = !mounted.current;
+        const frame = requestAnimationFrame(() => {
+            if (hash && (initialNavigation || navType !== 'POP')) {
+                document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'instant' });
+            } else if (navType !== 'POP') {
+                window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            }
+            mounted.current = true;
+        });
+        return () => cancelAnimationFrame(frame);
     }, [pathname, hash, navType]);
 
     return null;

@@ -1,86 +1,48 @@
-import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
-import type { Variants } from 'framer-motion';
-import { Mail, Linkedin, Check, Copy } from 'lucide-react';
-
-const fadeUp: Variants = {
-    hidden: { opacity: 0, y: 32 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
-};
+import { useRef, useState, useEffect } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import { Mail, Linkedin, Check, Copy, ArrowUpRight, ArrowUp } from 'lucide-react';
+import Magnetic from '@/components/ui/Magnetic';
 
 export default function Contact() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
     const [copied, setCopied] = useState(false);
-
+    const [copyError, setCopyError] = useState(false);
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const reducedMotion = useReducedMotion();
     const email = 'contato@felipefmedeiros.com';
-
+    useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
     const handleCopyEmail = async () => {
         try {
             await navigator.clipboard.writeText(email);
             setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        } catch (err) {
-            console.error('Falha ao copiar email', err);
+            setCopyError(false);
+            if (timerRef.current) clearTimeout(timerRef.current);
+            timerRef.current = setTimeout(() => setCopied(false), 2000);
+        } catch {
+            setCopyError(true);
         }
     };
-
     return (
-        <section
-            ref={sectionRef}
-            id="contato"
-            className="relative py-32 overflow-hidden flex items-center justify-center min-h-[50vh]"
-        >
-            <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
-
-            <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-                <motion.div
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate={isInView ? 'visible' : 'hidden'}
-                    className="flex flex-col items-center"
-                >
-                    <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-5">
-                        Vamos conversar sobre seu <span className="text-gradient-cyan">próximo projeto.</span>
-                    </h2>
-
-                    <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mb-10 leading-relaxed">
-                        Seja para desenvolvimento web full-stack, revisão de arquitetura ou para construir experiências
-                        incríveis — eu estou sempre aberto para bater um papo.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row items-center gap-4">
-                        <a
-                            href={`mailto:${email}`}
-                            aria-label="Enviar e-mail correspondente"
-                            className="group relative flex items-center justify-center h-12 w-full sm:w-36 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all duration-300 overflow-hidden cursor-pointer"
-                        >
-                            <span className="flex items-center gap-2">
-                                <Mail size={18} />
-                                <span>Email</span>
-                            </span>
-                        </a>
-
-                        <a
-                            href="https://linkedin.com/in/felipe-fmedeiros"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center h-12 gap-2 px-6 rounded-full bg-card border border-border text-foreground font-medium hover:border-primary/40 hover:bg-secondary/50 transition-colors duration-300 w-full sm:w-auto"
-                        >
-                            <Linkedin size={18} />
-                            <span>LinkedIn</span>
-                        </a>
+        <section id="contato" className="contact-section">
+            <div aria-hidden="true" className="contact-orbit" />
+            <div className="content-shell relative">
+                <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} className="contact-main">
+                    <div className="section-eyebrow"><span>06 /</span><span>Contato</span></div>
+                    <h2>Vamos conversar<br />sobre seu <motion.span className="contact-gradient"
+                        initial={{ backgroundPosition: '100% 50%' }} whileInView={{ backgroundPosition: '0% 50%' }}
+                        viewport={{ once: true }} transition={{ duration: reducedMotion ? 0 : 4, ease: 'easeInOut' }}>próximo projeto.</motion.span></h2>
+                    <p>Seja para desenvolvimento web full-stack, revisão de arquitetura ou para construir experiências incríveis — eu estou sempre aberto para bater um papo.</p>
+                    <div className="contact-actions">
+                        <Magnetic><a href={`mailto:${email}`} aria-label="Enviar e-mail correspondente" className="action-primary"><Mail size={17} />Email<ArrowUpRight size={17} /></a></Magnetic>
+                        <Magnetic><a href="https://linkedin.com/in/felipe-fmedeiros" target="_blank" rel="noopener noreferrer" className="action-secondary"><Linkedin size={17} />LinkedIn<ArrowUpRight size={17} /></a></Magnetic>
                     </div>
-
-                    <button
-                        onClick={handleCopyEmail}
-                        className="mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground font-medium hover:text-foreground transition-colors duration-300 cursor-pointer"
-                        aria-label="Copiar email"
-                    >
-                        {copied ? <Check size={16} className="text-primary" /> : <Copy size={16} />}
-                        <span className={copied ? 'text-primary' : ''}>{copied ? 'Email copiado!' : email}</span>
+                    <button onClick={handleCopyEmail} className="contact-copy" aria-label="Copiar email">
+                        {copied ? <Check size={14} className="text-primary" /> : <Copy size={14} />}<span>{email}</span>
                     </button>
+                    <span className="contact-copy-status" role="status" aria-live="polite">{copied ? 'Email copiado!' : copyError ? 'Não foi possível copiar. Selecione o email acima.' : ''}</span>
                 </motion.div>
+                <footer className="site-footer"><a href="#hero" className="footer-name" onClick={(event) => { event.preventDefault(); document.getElementById('hero')?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth' }); }}>Felipe Medeiros<span>.</span></a><span>DESENVOLVEDOR FULL-STACK</span>
+                    <button onClick={() => document.getElementById('hero')?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth' })} aria-label="Voltar ao topo">Voltar ao topo<ArrowUp size={14} /></button>
+                </footer>
             </div>
         </section>
     );

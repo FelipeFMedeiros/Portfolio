@@ -72,7 +72,7 @@ export default function Hero() {
                             <p className="hero-specialty">Desenvolvedor <strong><Typewriter paused={still} /></strong></p>
                             <p className="hero-description">Estudante de Ciência da Computação na <span>UERN</span>, apaixonado por construir soluções web e mobile modernas. Tenho experiência com sistemas de larga escala, integrações mobile e interfaces que encantam.</p>
                             <div className="hero-tech">{TECH_BADGES.map((tech) => <span key={tech}>{tech}</span>)}</div>
-                            <div className="flex flex-wrap gap-3">
+                            <div className="hero-actions flex flex-wrap gap-3">
                                 <Magnetic><button className="action-primary" onClick={() => scrollTo('projetos')}>Ver Projetos <ArrowUpRight size={18} /></button></Magnetic>
                                 <Magnetic><a className="action-secondary" href="/CV_FullStack_FelipeMedeiros.pdf" download="CV_FullStack_FelipeMedeiros.pdf"><Download size={16} />Download CV</a></Magnetic>
                             </div>

@@ -10,10 +10,11 @@ import MouseGlow from '@/components/ui/MouseGlow';
 
 export default function Portfolio() {
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="portfolio-page min-h-screen bg-background text-foreground">
+            <a className="skip-link" href="#main-content">Pular para o conteúdo</a>
             <MouseGlow />
             <Header />
-            <main>
+            <main id="main-content" tabIndex={-1}>
                 <Hero />
                 <About />
                 <Education />
