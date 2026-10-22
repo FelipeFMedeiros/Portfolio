@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import type { ComponentType, CSSProperties } from 'react';
 import { motion, useInView } from 'motion/react';
 import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
@@ -49,6 +49,7 @@ type TechIcon = ComponentType<{
 interface RadarSkill {
     readonly label: string;
     readonly lines: readonly string[];
+    readonly description: string;
     readonly value: number; // 0–100
 }
 
@@ -66,12 +67,12 @@ interface StackCategory {
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const RADAR_SKILLS: readonly RadarSkill[] = [
-    { label: 'Front-end', lines: ['Front-end'], value: 90 },
-    { label: 'Back-end', lines: ['Back-end'], value: 80 },
-    { label: 'Mobile', lines: ['Mobile'], value: 78 },
-    { label: 'Banco de Dados', lines: ['Banco de', 'Dados'], value: 72 },
-    { label: 'UI/UX', lines: ['UI/UX'], value: 70 },
-    { label: 'DevOps & Cloud', lines: ['DevOps &', 'Cloud'], value: 65 },
+    { label: 'Front-end', lines: ['Front-end'], description: 'Interfaces com React e TypeScript.', value: 90 },
+    { label: 'Back-end', lines: ['Back-end'], description: 'APIs com Node.js e C# / .NET.', value: 80 },
+    { label: 'Mobile', lines: ['Mobile'], description: 'Aplicativos com React Native e Expo.', value: 78 },
+    { label: 'Banco de Dados', lines: ['Banco de', 'Dados'], description: 'Modelagem e integração de bancos de dados.', value: 72 },
+    { label: 'UI/UX', lines: ['UI/UX'], description: 'Prototipação no Figma e experiência de uso.', value: 70 },
+    { label: 'DevOps & Cloud', lines: ['DevOps &', 'Cloud'], description: 'Containers, infraestrutura e publicação.', value: 65 },
 ] as const;
 
 const STACK: readonly StackCategory[] = [
@@ -189,11 +190,20 @@ function RadarChart() {
     const isInView = useInView(chartRef, { once: true, amount: 0.35 });
     const reducedMotion = useReducedMotion();
     const [selected, setSelected] = useState<number | null>(null);
+    const [hovered, setHovered] = useState<number | null>(null);
+    const [focused, setFocused] = useState<number | null>(null);
+    const tooltipId = useId();
+    const active = hovered ?? focused ?? selected;
+    const activeSkill = active === null ? null : RADAR_SKILLS[active];
     const centerPoly = RADAR_SKILLS.map(() => `${CX},${CY}`).join(' ');
 
     return (
-        <div ref={chartRef} className="radar-panel">
+        <div ref={chartRef} className="radar-panel" onKeyDown={(event) => {
+            if (event.key === 'Escape') { setSelected(null); setHovered(null); setFocused(null); }
+        }}>
             <p className="skills-label">Visão Geral</p>
+            <div className="radar-explorer" onMouseLeave={() => setHovered(null)}>
+            <div className="radar-plot">
             <svg viewBox="0 0 500 500" className="radar-chart" role="img" aria-labelledby="radar-title radar-description">
                 <title id="radar-title">Gráfico radar de habilidades</title>
                 <desc id="radar-description">{RADAR_SKILLS.map((skill) => `${skill.label}: ${skill.value}%`).join('; ')}</desc>
@@ -202,29 +212,48 @@ function RadarChart() {
                     const end = pt(index, MAX_R);
                     return <line key={index} x1={CX} y1={CY} x2={end.x} y2={end.y} stroke="var(--border)" strokeWidth={1} />;
                 })}
-                {[0.25, 0.5, 0.75].map((ring) => <text key={ring} x={CX + 4} y={CY - MAX_R * ring - 3} fontSize="9" fill="var(--muted-foreground)" fontFamily="var(--font-mono)">{Math.round(ring * 100)}%</text>)}
                 <motion.polygon initial={{ points: reducedMotion ? dataPoly : centerPoly, opacity: 0 }}
                     animate={isInView ? { points: dataPoly, opacity: 1 } : {}}
                     transition={{ duration: reducedMotion ? 0 : 1.2, ease: [0.22, 1, 0.36, 1] }}
                     fill="color-mix(in srgb, var(--primary) 13%, transparent)" stroke="var(--primary)" strokeWidth={1.8} strokeLinejoin="round" />
                 {dataCoords.map((coordinate, index) => <motion.circle key={index}
                     initial={{ cx: reducedMotion ? coordinate.x : CX, cy: reducedMotion ? coordinate.y : CY, opacity: 0 }}
-                    animate={isInView ? { cx: coordinate.x, cy: coordinate.y, opacity: 1, r: selected === index ? 7 : 4 } : {}}
-                    transition={{ duration: reducedMotion ? 0 : 1, ease: 'easeOut' }}
+                    animate={isInView ? { cx: coordinate.x, cy: coordinate.y, opacity: 1, r: active === index ? 7 : 4 } : {}}
+                    transition={{ duration: reducedMotion ? 0 : 1, ease: 'easeOut', r: { duration: reducedMotion ? 0 : 0.15 } }}
                     fill="var(--primary)" stroke="var(--card)" strokeWidth={2} />)}
+                <g aria-hidden="true" className="radar-scale">
+                    {[0.25, 0.5, 0.75].map((ring) => <g key={ring} transform={`translate(${CX + 6}, ${CY - MAX_R * ring - 20})`}>
+                        <rect width="40" height="20" rx="4" fill="var(--card)" stroke="var(--border)" />
+                        <text x="20" y="13.5" textAnchor="middle" fontSize="11.5" fontWeight="600" fill="var(--foreground)" fontFamily="var(--font-mono)">{Math.round(ring * 100)}%</text>
+                    </g>)}
+                </g>
                 {RADAR_SKILLS.map((skill, index) => {
                     const a = angle(index);
                     const lx = CX + LABEL_R * Math.cos(a);
                     const ly = CY + LABEL_R * Math.sin(a);
                     const cos = Math.cos(a);
                     const anchor = cos < -0.3 ? 'end' : cos > 0.3 ? 'start' : 'middle';
-                    return <text key={skill.label} textAnchor={anchor} fill={selected === index ? 'var(--primary)' : 'var(--muted-foreground)'} fontSize={13.5} fontFamily="var(--font-display)">
+                    return <text key={skill.label} textAnchor={anchor} fill={active === index ? 'var(--primary)' : 'var(--muted-foreground)'} fontSize={13.5} fontFamily="var(--font-display)">
                         {skill.lines.map((line, j) => <tspan key={line} x={lx} y={j === 0 ? ly - ((skill.lines.length - 1) * LINE_H) / 2 : undefined} dy={j === 0 ? '0.35em' : LINE_H}>{line}</tspan>)}
                     </text>;
                 })}
             </svg>
+            {RADAR_SKILLS.map((skill, index) => <button key={skill.label} type="button" className={`radar-point-button ${active === index ? 'is-active' : ''}`}
+                style={{ left: `${dataCoords[index].x / 5}%`, top: `${dataCoords[index].y / 5}%` }}
+                aria-label={`${skill.label}: ${skill.value}%`} aria-pressed={selected === index} aria-describedby={active === index ? tooltipId : undefined}
+                onMouseEnter={() => setHovered(index)} onFocus={() => setFocused(index)} onBlur={() => setFocused(null)}
+                onClick={() => setSelected(selected === index ? null : index)} />)}
+            </div>
+            <div className="radar-readout">
+            {activeSkill ? <div id={tooltipId} role="tooltip" className="radar-tooltip">
+                <div><strong>{activeSkill.label}</strong><span>{activeSkill.value}%</span></div>
+                <p>{activeSkill.description}</p>
+            </div> : <p className="radar-hint">Passe o mouse, toque ou foque um ponto para explorar.</p>}
+            </div>
+            </div>
             <div className="radar-values" aria-label="Valores das habilidades">
                 {RADAR_SKILLS.map((skill, index) => <button key={skill.label} onClick={() => setSelected(selected === index ? null : index)}
+                    onFocus={() => setFocused(index)} onBlur={() => setFocused(null)} aria-describedby={active === index ? tooltipId : undefined}
                     aria-pressed={selected === index} className={selected === index ? 'is-selected' : ''}>
                     <span>{skill.label}</span><strong>{skill.value}<span>%</span></strong>
                 </button>)}

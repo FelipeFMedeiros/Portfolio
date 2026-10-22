@@ -436,7 +436,18 @@
 .skills-layout { display: grid; grid-template-columns: .85fr 1.2fr; gap: clamp(30px, 6vw, 90px); align-items: start; }
 .radar-panel { position: sticky; top: 120px; padding: 25px; border: 1px solid var(--border); border-radius: 14px; background: linear-gradient(160deg, color-mix(in srgb, var(--primary) 3%, var(--card)), var(--background)); }
 .skills-label { color: var(--muted-foreground); font: 400 10px var(--font-mono); text-transform: uppercase; letter-spacing: .15em; }
-.radar-chart { display: block; width: 100%; max-width: 450px; margin: 8px auto 0; overflow: visible; }
+.radar-plot { position: relative; width: 100%; max-width: 450px; margin: 8px auto 0; }
+.radar-chart { display: block; width: 100%; overflow: visible; }
+.radar-scale { pointer-events: none; }
+.radar-point-button { position: absolute; z-index: 1; width: 32px; height: 32px; border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; }
+.radar-point-button.is-active { background: color-mix(in srgb, var(--primary) 12%, transparent); }
+.radar-point-button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.radar-readout { display: grid; align-content: center; min-height: 100px; margin-bottom: 18px; padding: 13px 15px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--foreground); }
+.radar-tooltip > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.radar-tooltip strong { font-size: 12px; font-weight: 600; }
+.radar-tooltip > div > span { font: 500 12px var(--font-mono); color: var(--primary); }
+.radar-tooltip p { margin-top: 8px; color: var(--muted-foreground); font-size: 11px; line-height: 1.7; }
+.radar-hint { color: var(--muted-foreground); font-size: 11px; line-height: 1.7; }
 .radar-values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 10px; }
 .radar-values button { display: flex; flex-direction: column; gap: 7px; text-align: left; padding-top: 12px; border-top: 1px solid var(--border); cursor: pointer; }
 .radar-values button > span { color: var(--muted-foreground); font-size: 9px; }
