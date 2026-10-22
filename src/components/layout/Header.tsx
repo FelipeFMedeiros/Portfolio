@@ -8,11 +8,11 @@ import { useTheme } from '@/contexts/ThemeContext';
 
 const NAV_LINKS = [
     { label: 'Início', href: '#hero' },
-    { label: 'Sobre', href: '#sobre' },
-    { label: 'Educação', href: '#educacao' },
-    { label: 'Experiência', href: '#experiencia' },
-    { label: 'Habilidades', href: '#habilidades' },
     { label: 'Projetos', href: '#projetos' },
+    { label: 'Experiência', href: '#experiencia' },
+    { label: 'Sobre', href: '#sobre' },
+    { label: 'Habilidades', href: '#habilidades' },
+    { label: 'Educação', href: '#educacao' },
     { label: 'Contato', href: '#contato' },
 ] as const;
 

@@ -100,7 +100,7 @@ export default function Hero() {
                     </motion.div>
                 </div>
                 <div className="hero-bottomline">
-                    <button onClick={() => scrollTo('sobre')} className="hero-scroll"><span className="scroll-arrow"><ArrowDown size={15} /></span>Role para baixo</button>
+                    <button onClick={() => scrollTo('projetos')} className="hero-scroll"><span className="scroll-arrow"><ArrowDown size={15} /></span>Role para baixo</button>
                     <span className="hidden sm:block font-mono text-[10px] tracking-widest text-muted-foreground">CÓDIGO COM PROPÓSITO.</span>
                     {!reducedMotion && <button onClick={() => { setPaused(!paused); reset(); }} className="animation-toggle" aria-label={paused ? 'Retomar animações' : 'Pausar animações'} title={paused ? 'Retomar animações' : 'Pausar animações'}>{paused ? <Play size={14} /> : <Pause size={14} />}</button>}
                 </div>

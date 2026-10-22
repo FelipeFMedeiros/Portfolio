@@ -16,11 +16,11 @@ export default function Portfolio() {
             <Header />
             <main id="main-content" tabIndex={-1}>
                 <Hero />
-                <About />
-                <Education />
-                <Experience />
-                <Skills />
                 <Projects />
+                <Experience />
+                <About />
+                <Skills />
+                <Education />
                 <Contact />
             </main>
         </div>
