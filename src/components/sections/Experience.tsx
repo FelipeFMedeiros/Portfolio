@@ -157,7 +157,7 @@ export default function Experience() {
 
             <div className="content-shell">
                 {/* ── Section heading ── */}
-                <SectionHeading number="03" eyebrow="Experiência">Trajetória <span>Profissional.</span></SectionHeading>
+                <SectionHeading number="02" eyebrow="Trajetória & engenharia">Trajetória profissional.</SectionHeading>
 
                 {/* ── Timeline ── */}
                 <div ref={timelineRef} className="experience-timeline">

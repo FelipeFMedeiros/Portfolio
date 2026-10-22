@@ -132,7 +132,7 @@ export default function Education() {
 
             <div className="content-shell">
                 {/* ── Section heading ── */}
-                <SectionHeading number="02" eyebrow="Educação">Formação & <span>Certificações.</span></SectionHeading>
+                <SectionHeading number="05" eyebrow="Formação & repertório">Formação & certificações.</SectionHeading>
 
                 {/* ── UERN Card ── */}
                 <motion.div

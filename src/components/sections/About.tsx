@@ -101,7 +101,7 @@ export default function About() {
 
             <div className="content-shell">
                 {/* ── Section heading ── */}
-                <SectionHeading number="01" eyebrow="Quem sou eu">Sobre <span>mim.</span></SectionHeading>
+                <SectionHeading number="03" eyebrow="Arquitetura & bio">Sobre mim.</SectionHeading>
 
                 {/* ── Main content: text + stats ── */}
                 <div className="about-layout">

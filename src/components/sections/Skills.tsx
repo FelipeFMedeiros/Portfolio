@@ -238,7 +238,7 @@ export default function Skills() {
     return (
         <section id="habilidades" className="section-shell skills-section">
             <div className="content-shell">
-                <SectionHeading number="04" eyebrow="Habilidades">Minhas <span>Skills.</span></SectionHeading>
+                <SectionHeading number="04" eyebrow="Ferramentas & fundamentos">Minhas skills.</SectionHeading>
                 <div className="skills-layout">
                     <RadarChart />
                     <div className="skills-stack">

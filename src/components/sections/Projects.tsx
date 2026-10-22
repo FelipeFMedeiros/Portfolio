@@ -5,7 +5,7 @@ import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersR
 import { ArrowUpRight, Github, Layers } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { PROJECTS, CATEGORY_LABELS, CATEGORY_STYLES } from '@/data/projects';
+import { PROJECTS, CATEGORY_LABELS } from '@/data/projects';
 import type { Project, ProjectCategory } from '@/data/projects';
 import InteractiveSurface from '@/components/ui/InteractiveSurface';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -20,18 +20,24 @@ const ALL_TABS: { label: string; value: FilterTab }[] = [
 ];
 
 function ProjectCard({ project }: { project: Project }) {
-    const styles = CATEGORY_STYLES[project.category];
     const number = String(PROJECTS.indexOf(project) + 1).padStart(2, '0');
+    const address = project.liveUrl ? new URL(project.liveUrl).hostname.replace(/^www\./, '') : `app://${project.slug}`;
+    const systemType = project.tags.includes('React Native') ? 'Mobile & API' : project.tags.includes('Node.js') ? 'Full-Stack' : 'Web & performance';
     return (
-        <InteractiveSurface tilt className="project-card group">
-            <Link to={`/projects/${project.slug}/`} state={{ fromPortfolio: true }} aria-label={`${number} / Explorar projeto: ${project.title}`} className={cn('project-cover bg-linear-to-br', styles.gradient)}>
+        <InteractiveSurface className="project-card group">
+            <Link to={`/projects/${project.slug}/`} state={{ fromPortfolio: true }} className="project-cover">
+                <div className="project-window-bar" aria-hidden="true">
+                    <span className="window-controls"><span /><span /><span /></span>
+                    <span className="window-address">{address}</span><span className="window-index">{number}</span>
+                </div>
+                <div className="project-viewport">
                 {project.coverImage ? <ResponsiveImage sizes="(max-width: 767px) calc(100vw - 40px), (min-width: 1280px) 660px, 55vw" src={project.coverImage} alt={`Capa do projeto ${project.title}`} loading="lazy" width="800" height="500" /> : <Layers size={38} className="text-primary" />}
                 <div className="project-image-shade" />
-                <span className="project-number" aria-hidden="true">{number} /</span>
-                <span className="project-explore">Explorar projeto<ArrowUpRight size={18} /></span>
+                <span className="project-explore">Explorar projeto<span className="sr-only">: {project.title}</span><ArrowUpRight size={18} /></span>
+                </div>
             </Link>
             <div className="project-body">
-                <div className="project-meta"><span className={cn('rounded-full border px-2.5 py-1 text-[10px]', styles.badge)}>{CATEGORY_LABELS[project.category]}</span><span>{project.year}</span></div>
+                <div className="project-meta"><div><span className="project-status"><span aria-hidden="true" />{systemType}</span><span className="project-category">{CATEGORY_LABELS[project.category]}</span></div><span>{project.year}</span></div>
                 <h3><Link to={`/projects/${project.slug}/`} state={{ fromPortfolio: true }}>{project.title}</Link></h3>
                 <p>{project.tagline}</p>
                 <div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
@@ -64,7 +70,7 @@ export default function Projects() {
     return (
         <section id="projetos" className="section-shell projects-section">
             <div className="content-shell">
-                <SectionHeading number="05" eyebrow="Projetos">O que eu <span>construí.</span></SectionHeading>
+                <SectionHeading number="01" eyebrow="Projetos em produção">O que eu construí.</SectionHeading>
                 <div className="project-filter-bar">
                     <div role="group" aria-label="Filtrar projetos por categoria" className="project-filters">
                         {tabs.map((tab) => <button key={tab.value} onClick={() => selectFilter(tab.value)} aria-pressed={activeFilter === tab.value}
