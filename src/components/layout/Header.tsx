@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { useTheme } from '@/contexts/ThemeContext';
 
 const NAV_LINKS = [
+    { label: 'Início', href: '#hero' },
     { label: 'Sobre', href: '#sobre' },
     { label: 'Educação', href: '#educacao' },
     { label: 'Experiência', href: '#experiencia' },
@@ -18,7 +19,7 @@ const NAV_LINKS = [
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [activeSection, setActiveSection] = useState('');
+    const [activeSection, setActiveSection] = useState('hero');
     const { theme, systemTheme, setTheme } = useTheme();
     const isDark = (theme === 'system' ? systemTheme : theme) === 'dark';
     const reducedMotion = useReducedMotion();
@@ -31,7 +32,7 @@ export default function Header() {
         const update = () => {
             frame = 0;
             setScrolled(window.scrollY > 40);
-            let active = '';
+            let active = 'hero';
             for (const link of NAV_LINKS) {
                 const section = document.getElementById(link.href.slice(1));
                 if (section && section.getBoundingClientRect().top <= window.innerHeight * 0.35) {
