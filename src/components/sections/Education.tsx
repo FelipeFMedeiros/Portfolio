@@ -1,7 +1,12 @@
-import { useRef, useEffect, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
-import type { Variants } from 'framer-motion';
-import { Award, ChevronLeft, ChevronRight, ExternalLink, MapPin, Calendar } from 'lucide-react';
+import ResponsiveImage from '@/components/ui/ResponsiveImage';
+import { useRef, useEffect, useState, useCallback } from 'react';
+import { motion, useInView, AnimatePresence } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import type { Variants } from 'motion/react';
+import { Award, ChevronLeft, ChevronRight, ExternalLink, MapPin, Calendar, Maximize2 } from 'lucide-react';
+import SectionHeading from '@/components/ui/SectionHeading';
+import InteractiveSurface from '@/components/ui/InteractiveSurface';
+import ImagePreview from '@/components/ui/ImagePreview';
 
 const DISCIPLINES = [
     'Algoritmos e Estruturas de Dados',
@@ -92,6 +97,9 @@ export default function Education() {
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const [preview, setPreview] = useState<Certificate | null>(null);
+    const closePreview = useCallback(() => setPreview(null), []);
+    const reducedMotion = useReducedMotion();
 
     useEffect(() => {
         const el = scrollRef.current;
@@ -113,42 +121,30 @@ export default function Education() {
         };
     }, []);
 
-    const handleScrollLeft = () => scrollRef.current?.scrollBy({ left: -308, behavior: 'smooth' });
+    const handleScrollLeft = () => scrollRef.current?.scrollBy({ left: -340, behavior: reducedMotion ? 'instant' : 'smooth' });
 
-    const handleScrollRight = () => scrollRef.current?.scrollBy({ left: 308, behavior: 'smooth' });
+    const handleScrollRight = () => scrollRef.current?.scrollBy({ left: 340, behavior: reducedMotion ? 'instant' : 'smooth' });
 
     return (
-        <section ref={sectionRef} id="educacao" className="relative py-24 overflow-hidden">
+        <section ref={sectionRef} id="educacao" className="section-shell education-section">
             {/* Section separator */}
             <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
-            <div className="max-w-6xl mx-auto px-6">
+            <div className="content-shell">
                 {/* ── Section heading ── */}
-                <motion.div
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate={isInView ? 'visible' : 'hidden'}
-                    className="mb-14"
-                >
-                    <span className="text-primary text-sm font-medium tracking-[0.2em] uppercase mb-3 block">
-                        Educação
-                    </span>
-                    <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                        Formação & <span className="text-gradient-cyan">Certificações</span>
-                    </h2>
-                </motion.div>
+                <SectionHeading number="05" eyebrow="Formação & repertório">Formação & certificações.</SectionHeading>
 
                 {/* ── UERN Card ── */}
                 <motion.div
                     variants={fadeUp}
                     initial="hidden"
                     animate={isInView ? 'visible' : 'hidden'}
-                    className="md:bg-card md:border md:border-border md:rounded-3xl mb-16 pb-8 md:p-8 md:hover:border-primary/30 md:hover:-translate-y-0.5 transition-all duration-300 group"
+                    className="education-degree"
                 >
                     <div className="flex flex-col sm:flex-row gap-5 md:gap-6 items-start mb-7 md:mb-8">
                         {/* Logo */}
                         <div className="shrink-0 size-16 md:size-20 rounded-2xl bg-[#104A90] overflow-hidden flex items-center justify-center p-2 border border-border/30">
-                            <img src="/uern-logo.png" alt="UERN" className="size-full object-contain" />
+                            <ResponsiveImage sizes="64px" src="/uern-logo.png" loading="lazy" alt="UERN" className="size-full object-contain" />
                         </div>
 
                         {/* Info */}
@@ -160,7 +156,7 @@ export default function Education() {
                                         Bacharelado em Ciência da Computação
                                     </h3>
                                     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
-                                        <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+                                        <span className="size-1.5 rounded-full bg-primary" />
                                         Em andamento
                                     </span>
                                 </div>
@@ -191,8 +187,9 @@ export default function Education() {
                         <motion.div
                             variants={staggerContainer}
                             initial="hidden"
-                            animate={isInView ? 'visible' : 'hidden'}
-                            className="flex flex-wrap gap-2"
+                            whileInView="visible"
+                            viewport={{ once: true, amount: 0.25 }}
+                            className="flex flex-wrap gap-2 discipline-chips"
                         >
                             {DISCIPLINES.map((d) => (
                                 <motion.span
@@ -237,25 +234,29 @@ export default function Education() {
                     {/* Horizontal scroll carousel */}
                     <div
                         ref={scrollRef}
-                        className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory"
+                        className="certificate-carousel scrollbar-hide"
                         role="region"
                         aria-label="Carrossel de certificados"
+                        tabIndex={0}
                     >
                         {CERTIFICATES.map((cert) => (
-                            <div
+                            <InteractiveSurface
                                 key={cert.title}
-                                className="snap-start shrink-0 w-72 bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 group flex flex-col"
+                                tilt
+                                className="certificate-card group"
                             >
                                 {/* Visual header */}
-                                <div className="h-45 bg-linear-to-br from-primary/15 via-primary/5 to-secondary relative overflow-hidden flex items-center justify-center">
+                                <div className="certificate-image">
                                     {cert.imageUrl ? (
-                                        <a href={cert.credentialUrl} target="_blank">
-                                            <img
+                                        <button onClick={() => setPreview(cert)} aria-label={`Ampliar certificado: ${cert.title}`}>
+                                            <ResponsiveImage sizes="(max-width: 767px) 290px, 320px"
                                                 src={cert.imageUrl}
                                                 alt={cert.title}
                                                 className="w-full h-full object-cover"
+                                                loading="lazy"
                                             />
-                                        </a>
+                                            <span className="certificate-zoom"><Maximize2 size={16} /></span>
+                                        </button>
                                     ) : (
                                         <Award
                                             size={44}
@@ -268,7 +269,7 @@ export default function Education() {
 
                                 {/* Card body */}
                                 <div className="p-5 flex flex-col flex-1 gap-1">
-                                    <h4 className="font-semibold text-sm text-foreground leading-snug line-clamp-2">
+                                    <h4 className="font-semibold text-sm text-foreground leading-snug">
                                         {cert.title}
                                     </h4>
                                     <p className="text-xs text-primary font-medium mt-0.5">{cert.issuer}</p>
@@ -286,7 +287,7 @@ export default function Education() {
                                         </a>
                                     )}
                                 </div>
-                            </div>
+                            </InteractiveSurface>
                         ))}
                     </div>
 
@@ -301,6 +302,8 @@ export default function Education() {
                     </div>
                 </motion.div>
             </div>
+            <AnimatePresence>{preview?.imageUrl && <ImagePreview image={preview.imageUrl} title={preview.title}
+                href={preview.credentialUrl} onClose={closePreview} />}</AnimatePresence>
         </section>
     );
 }

@@ -1,47 +1,26 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/logo.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-            rel="stylesheet"
-        />
-
-        <!-- Primary Meta Tags -->
-        <title>Portfolio - Felipe Medeiros</title>
-        <meta name="title" content="Portfolio - Felipe Medeiros" />
-        <meta
-            name="description"
-            content="Portfolio de Felipe Medeiros. Descubra meus projetos, habilidades e experiência como Desenvolvedor Full-Stack."
-        />
-        <meta name="keywords" content="Felipe Medeiros, Portfolio, Full-Stack, Dev, Web, React, Front-end, Back-end" />
         <meta name="author" content="Felipe Medeiros" />
-
-        <!-- Open Graph / Facebook / Discord -->
+        <meta name="color-scheme" content="dark light" />
+        <link rel="icon" type="image/png" href="/logo.png" />
+        <link rel="preload" href="/node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="/node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+        <script>
+            try { const theme = localStorage.getItem('portfolio-theme'); document.documentElement.classList.toggle('dark', theme === 'dark' || (!theme) || (theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)); } catch {}
+        </script>
+        <!--seo:start-->
+        <title>Felipe Medeiros | Desenvolvedor Full-Stack, React e React Native</title>
+        <meta name="description" content="Conheça os projetos de Felipe Medeiros, desenvolvedor Full-Stack e estudante de Ciência da Computação na UERN. React, TypeScript, Node.js, C# e React Native." />
+        <meta name="robots" content="index,follow,max-image-preview:large" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://felipefmedeiros.com/" />
-        <meta property="og:title" content="Portfolio - Felipe Medeiros" />
-        <meta
-            property="og:description"
-            content="Portfolio de Felipe Medeiros. Descubra meus projetos, habilidades e experiência como Desenvolvedor Full-Stack."
-        />
-        <meta property="og:image" content="https://felipefmedeiros.com/logo-square.png" />
-
-        <!-- Twitter -->
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://felipefmedeiros.com/" />
-        <meta property="twitter:title" content="Portfolio - Felipe Medeiros" />
-        <meta
-            property="twitter:description"
-            content="Portfolio de Felipe Medeiros. Descubra meus projetos, habilidades e experiência como Desenvolvedor Full-Stack."
-        />
-        <meta property="twitter:image" content="https://felipefmedeiros.com/logo-square.png" />
+        <meta property="og:locale" content="pt_BR" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <!--seo:end-->
+        <!--image-preload-->
+        <noscript><style>#root [style*="opacity"]{opacity:1!important}#root [style*="transform"]{transform:none!important}*,*::before,*::after{animation:none!important}</style></noscript>
     </head>
     <body>
         <div id="root"></div>

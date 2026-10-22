@@ -1,198 +1,71 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Github, ExternalLink, Calendar, Tag } from 'lucide-react';
+import ResponsiveImage from '@/components/ui/ResponsiveImage';
+import { useState, useCallback } from 'react';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
+import type { Variants } from 'motion/react';
+import { ArrowLeft, ArrowUpRight, Github, Calendar, Tag, Maximize2 } from 'lucide-react';
 import MouseGlow from '@/components/ui/MouseGlow';
+import Magnetic from '@/components/ui/Magnetic';
+import ImagePreview from '@/components/ui/ImagePreview';
 import { PROJECTS, CATEGORY_LABELS, CATEGORY_STYLES } from '@/data/projects';
+import type { ProjectScreenshot } from '@/data/projects';
 import { cn } from '@/lib/utils';
+
+const reveal: Variants = {
+    hidden: { opacity: 0, y: 22 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
 
 export default function ProjectDetail() {
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
+    const [preview, setPreview] = useState<ProjectScreenshot | null>(null);
+    const closePreview = useCallback(() => setPreview(null), []);
+    const project = PROJECTS.find((entry) => entry.slug === slug);
+    const goBack = () => location.state?.fromPortfolio ? navigate(-1) : navigate('/#projetos');
 
-    const project = PROJECTS.find((p) => p.slug === slug);
-
-    // ── Not found ──────────────────────────────────────────────────────────────
-    if (!project) {
-        return (
-            <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-                <div className="text-center space-y-4">
-                    <p className="text-muted-foreground">Projeto não encontrado.</p>
-                    <button
-                        onClick={() => navigate('/#projetos')}
-                        className="text-primary hover:underline text-sm cursor-pointer"
-                    >
-                        ← Voltar para projetos
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
+    if (!project) return (
+        <main className="project-not-found"><span className="font-mono text-sm text-primary">404 /</span><h1>Projeto não encontrado.</h1>
+            <Link className="action-secondary" to="/#projetos"><ArrowLeft size={16} />Voltar para projetos</Link></main>
+    );
     const styles = CATEGORY_STYLES[project.category];
+    const next = PROJECTS[(PROJECTS.indexOf(project) + 1) % PROJECTS.length];
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="project-detail-page">
             <MouseGlow />
-
-            <main className="pt-12 sm:pt-16 pb-24">
-                <div className="max-w-4xl mx-auto px-6">
-                    {/* ── Back button ── */}
-                    <motion.button
-                        initial={{ opacity: 0, x: -12 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.35 }}
-                        onClick={() => navigate(-1)}
-                        className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10 cursor-pointer"
-                    >
-                        <ArrowLeft
-                            size={15}
-                            className="group-hover:-translate-x-0.5 transition-transform duration-200"
-                        />
-                        Voltar
-                    </motion.button>
-
-                    {/* ── Hero header ── */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.08 }}
-                        className={cn(
-                            'relative rounded-3xl overflow-hidden mb-10 p-8 sm:p-12 bg-linear-to-br',
-                            styles.gradient,
-                        )}
-                    >
-                        <div className="absolute inset-0 hero-dot-grid opacity-20" />
-
-                        <div className="relative">
-                            {/* Meta */}
-                            <div className="flex flex-wrap items-center gap-3 mb-5">
-                                <span
-                                    className={cn('text-xs font-medium px-2.5 py-1 rounded-full border', styles.badge)}
-                                >
-                                    {CATEGORY_LABELS[project.category]}
-                                </span>
-                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                    <Calendar size={12} /> {project.year}
-                                </span>
-                            </div>
-
-                            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">{project.title}</h1>
-                            <p className="text-muted-foreground text-base sm:text-lg leading-relaxed max-w-2xl">
-                                {project.tagline}
-                            </p>
-
-                            {/* CTA buttons */}
-                            {(project.repoUrl ?? project.liveUrl) && (
-                                <div className="flex flex-wrap gap-3 mt-7">
-                                    {project.repoUrl && (
-                                        <a
-                                            href={project.repoUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card/70 backdrop-blur-sm border border-border text-sm font-medium hover:border-primary/40 hover:text-primary transition-all duration-200"
-                                        >
-                                            <Github size={15} /> Repositório
-                                        </a>
-                                    )}
-                                    {project.liveUrl && (
-                                        <a
-                                            href={project.liveUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20 text-primary text-sm font-medium hover:bg-primary/20 transition-all duration-200"
-                                        >
-                                            <ExternalLink size={15} /> Ver online
-                                        </a>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    </motion.div>
-
-                    {/* ── Screenshots ── */}
-                    {project.screenshots.length > 0 && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 16 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.45, delay: 0.18 }}
-                            className="mb-12"
-                        >
-                            <h2 className="text-lg font-bold mb-5">Capturas de tela</h2>
-                            <div className="grid sm:grid-cols-2 gap-4">
-                                {project.screenshots.map((ss, i) => (
-                                    <figure
-                                        key={i}
-                                        className="rounded-2xl overflow-hidden border border-border bg-card"
-                                    >
-                                        <img
-                                            src={ss.src}
-                                            alt={ss.caption ?? `Screenshot ${i + 1}`}
-                                            className="w-full h-auto object-cover"
-                                        />
-                                        {ss.caption && (
-                                            <figcaption className="px-4 py-2 text-xs text-muted-foreground">
-                                                {ss.caption}
-                                            </figcaption>
-                                        )}
-                                    </figure>
-                                ))}
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {/* ── Description ── */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.45, delay: 0.22 }}
-                        className="mb-12"
-                    >
-                        <h2 className="text-lg font-bold mb-3">Sobre o projeto</h2>
-                        <p className="text-muted-foreground leading-relaxed">{project.description}</p>
-                    </motion.div>
-
-                    {/* ── What was built ── */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.45, delay: 0.28 }}
-                        className="mb-12"
-                    >
-                        <h2 className="text-lg font-bold mb-5">O que eu construí</h2>
-                        <ul className="flex flex-col gap-3.5">
-                            {project.highlights.map((item, i) => (
-                                <li key={i} className="flex gap-3 text-sm text-muted-foreground leading-relaxed">
-                                    <span className="mt-1.75 shrink-0 size-1.5 rounded-full bg-primary/60" />
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
-                    </motion.div>
-
-                    {/* ── Tech stack ── */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.45, delay: 0.33 }}
-                        className="border-t border-border pt-10"
-                    >
-                        <h2 className="flex items-center gap-2 text-lg font-bold mb-5">
-                            <Tag size={15} className="text-primary" />
-                            Stack utilizada
-                        </h2>
-                        <div className="flex flex-wrap gap-2">
-                            {project.tags.map((tag) => (
-                                <span
-                                    key={tag}
-                                    className="px-3 py-1.5 text-sm font-medium rounded-lg bg-card border border-border text-foreground hover:border-primary/40 transition-colors duration-200"
-                                >
-                                    {tag}
-                                </span>
-                            ))}
-                        </div>
-                    </motion.div>
+            <a className="skip-link" href="#project-content">Pular para o conteúdo</a>
+            <header className="detail-header content-shell"><Link to="/" className="brand"><span className="brand-mark" aria-hidden="true">f<span>.</span>m</span><span className="brand-name">Felipe<span className="text-primary">.</span></span><span className="sr-only"> Medeiros — início</span></Link>
+                <button onClick={goBack} className="detail-back"><ArrowLeft size={16} />Voltar</button>
+            </header>
+            <motion.main key={project.slug} id="project-content" tabIndex={-1} variants={{ visible: { transition: { staggerChildren: 0.1 } } }} initial="hidden" animate="visible" className="content-shell detail-main">
+                <motion.div variants={reveal} className="detail-intro">
+                    <div className="detail-meta"><span className={cn('text-xs px-3 py-1.5 rounded-full border', styles.badge)}>{CATEGORY_LABELS[project.category]}</span><span><Calendar size={13} />{project.year}</span><span className="ml-auto font-mono text-[10px]">PROJETO / {String(PROJECTS.indexOf(project) + 1).padStart(2, '0')}</span></div>
+                    <h1>{project.title}<span>.</span></h1><p>{project.tagline}</p>
+                    {(project.repoUrl || project.liveUrl) && <div className="flex flex-wrap gap-3 mt-7">
+                        {project.liveUrl && <Magnetic><a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="action-primary">Ver online<ArrowUpRight size={17} /></a></Magnetic>}
+                        {project.repoUrl && <Magnetic><a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="action-secondary"><Github size={16} />Repositório</a></Magnetic>}
+                    </div>}
+                </motion.div>
+                {project.coverImage && <motion.div variants={reveal} className="detail-cover"><div className="detail-cover-bar"><span aria-hidden="true">● ● ●</span><span>{project.title}</span><ArrowUpRight size={13} /></div><ResponsiveImage sizes="(min-width: 1280px) 1200px, calc(100vw - 40px)" src={project.coverImage} alt={`Capa do projeto ${project.title}`} fetchPriority="high" /></motion.div>}
+                <div className="detail-content-grid">
+                    <div>
+                        <motion.section variants={reveal} className="detail-description"><div className="section-eyebrow"><span>01 /</span><span>Sobre o projeto</span></div><h2>Sobre o projeto</h2><p>{project.description}</p></motion.section>
+                        <motion.section variants={reveal} className="detail-highlights"><div className="section-eyebrow"><span>02 /</span><span>Desenvolvimento</span></div><h2>O que eu construí</h2><ul>{project.highlights.map((item, index) => <li key={item}><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><p>{item}</p></li>)}</ul></motion.section>
+                    </div>
+                    <motion.aside variants={reveal} className="detail-stack"><h2><Tag size={16} />Stack utilizada</h2><div>{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></motion.aside>
                 </div>
-            </main>
+                {project.screenshots.length > 0 && <section className="detail-screenshots"><div className="section-eyebrow"><span>03 /</span><span>Galeria</span></div><h2>Capturas de tela</h2><div className={cn('detail-gallery', project.screenshots.length === 1 && 'single-image')}>
+                    {project.screenshots.map((screenshot, index) => <motion.figure key={screenshot.src} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }}>
+                        <button onClick={() => setPreview(screenshot)} aria-label={`Ampliar: ${screenshot.caption ?? `Screenshot ${index + 1}`}`}><ResponsiveImage sizes="(min-width: 1280px) 1200px, calc(100vw - 40px)" src={screenshot.src} alt={screenshot.caption ?? `Screenshot ${index + 1}`} loading="lazy" /><span><Maximize2 size={17} /></span></button>
+                        {screenshot.caption && <figcaption><span>{String(index + 1).padStart(2, '0')}</span>{screenshot.caption}</figcaption>}
+                    </motion.figure>)}
+                </div></section>}
+                <Link to={`/projects/${next.slug}/`} className="next-project"><span className="font-mono text-xs text-muted-foreground">PRÓXIMO PROJETO</span><span>{next.title}<ArrowUpRight /></span></Link>
+                <footer className="detail-footer"><span>Felipe Medeiros</span><Link to="/#projetos">Todos os projetos<ArrowLeft size={14} /></Link></footer>
+            </motion.main>
+            <AnimatePresence>{preview && <ImagePreview image={preview.src} title={preview.caption ?? project.title} onClose={closePreview} />}</AnimatePresence>
         </div>
     );
 }

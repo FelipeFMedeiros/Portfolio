@@ -1,16 +1,21 @@
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import '@/styles/index.css';
 import App from './App.tsx';
 import { ThemeProvider } from '@/contexts/ThemeProvider.tsx';
 
-createRoot(document.getElementById('root')!).render(
+const application = (
     <StrictMode>
         <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">
             <BrowserRouter>
                 <App />
             </BrowserRouter>
         </ThemeProvider>
-    </StrictMode>,
+    </StrictMode>
 );
+const root = document.getElementById('root')!;
+if (root.dataset.prerendered === 'true') {
+    // O HTML estático pode pintar antes do trabalho de hidratação e das animações.
+    requestAnimationFrame(() => window.setTimeout(() => hydrateRoot(root, application), 0));
+} else createRoot(root).render(application);

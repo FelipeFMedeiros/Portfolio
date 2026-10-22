@@ -1,7 +1,9 @@
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import type { Variants } from 'framer-motion';
+import { motion, useInView, useScroll, useTransform } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import type { Variants } from 'motion/react';
 import { MapPin, Calendar } from 'lucide-react';
+import SectionHeading from '@/components/ui/SectionHeading';
 
 interface ExperienceEntry {
     role: string;
@@ -61,11 +63,6 @@ const EXPERIENCES: ExperienceEntry[] = [
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-const fadeUp: Variants = {
-    hidden: { opacity: 0, y: 32 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
-};
-
 const fadeRight: Variants = {
     hidden: { opacity: 0, x: -24 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.55, ease: 'easeOut' } },
@@ -73,37 +70,30 @@ const fadeRight: Variants = {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-function TimelineItem({ exp, index, isInView }: { exp: ExperienceEntry; index: number; isInView: boolean }) {
+function TimelineItem({ exp, index }: { exp: ExperienceEntry; index: number }) {
+    const itemRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(itemRef, { once: true, amount: 0.2 });
     return (
         <motion.div
+            ref={itemRef}
             variants={fadeRight}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: index * 0.18 }}
-            className="relative pl-6 sm:pl-8 md:pl-14"
+            className={`timeline-item ${isInView ? 'is-revealed' : ''}`}
         >
             {/* Timeline dot */}
-            <div className="absolute left-0.75 md:left-0 top-2 md:top-2.5 flex items-center justify-center">
-                {exp.current ? (
-                    <>
-                        {/* Pulse ring */}
-                        <span className="absolute size-4 md:size-5 rounded-full bg-primary/20 animate-ping" />
-                        <span className="relative size-2.5 md:size-3.5 rounded-full bg-primary shadow-[0_0_10px_oklch(0.76_0.15_207/0.6)]" />
-                    </>
-                ) : (
-                    <span className="size-2.5 md:size-3.5 rounded-full bg-background border-2 border-primary/50" />
-                )}
-            </div>
+            <span aria-hidden="true" className="timeline-dot" />
+            <span aria-hidden="true" className="timeline-index">0{index + 1}</span>
 
             {/* Card / Container */}
-            <div className="md:bg-card md:border md:border-border md:rounded-2xl pb-6 md:p-6 md:hover:border-primary/30 md:hover:-translate-y-0.5 transition-all duration-300 group">
+            <div className="timeline-card group">
                 {/* Headers */}
                 <div className="flex flex-col gap-1.5 mb-3">
                     <div className="flex flex-wrap items-center gap-3">
                         <h3 className="font-bold text-lg md:text-xl text-foreground leading-tight">{exp.role}</h3>
                         {exp.current && (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
-                                <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+                                <span className="size-1.5 rounded-full bg-primary" />
                                 Atual
                             </span>
                         )}
@@ -155,45 +145,30 @@ function TimelineItem({ exp, index, isInView }: { exp: ExperienceEntry; index: n
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function Experience() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
+    const timelineRef = useRef<HTMLDivElement>(null);
+    const reducedMotion = useReducedMotion();
+    const { scrollYProgress } = useScroll({ target: timelineRef, offset: ['start 60%', 'end 65%'] });
+    const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
     return (
-        <section ref={sectionRef} id="experiencia" className="relative py-24 overflow-hidden">
+        <section id="experiencia" className="section-shell experience-section">
             {/* Section separator */}
             <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
-            <div className="max-w-6xl mx-auto px-6">
+            <div className="content-shell">
                 {/* ── Section heading ── */}
-                <motion.div
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate={isInView ? 'visible' : 'hidden'}
-                    className="mb-14"
-                >
-                    <span className="text-primary text-sm font-medium tracking-[0.2em] uppercase mb-3 block">
-                        Experiência
-                    </span>
-                    <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                        Trajetória <span className="text-gradient-cyan">Profissional</span>
-                    </h2>
-                </motion.div>
+                <SectionHeading number="02" eyebrow="Trajetória & engenharia">Trajetória profissional.</SectionHeading>
 
                 {/* ── Timeline ── */}
-                <div className="relative max-w-3xl">
+                <div ref={timelineRef} className="experience-timeline">
                     {/* Vertical line */}
-                    <motion.div
-                        initial={{ scaleY: 0 }}
-                        animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
-                        transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-                        style={{ originY: 0 }}
-                        className="absolute left-1.75 md:left-1.5 top-2 bottom-4 w-0.5 bg-linear-to-b from-primary/50 via-border to-transparent"
-                    />
+                    <div aria-hidden="true" className="timeline-track"><motion.div className="timeline-fill"
+                        style={{ scaleY: reducedMotion ? 1 : scaleY, originY: 0 }} /></div>
 
                     {/* Entries */}
-                    <div className="flex flex-col gap-8 sm:gap-10">
+                    <div className="flex flex-col gap-8 sm:gap-12">
                         {EXPERIENCES.map((exp, i) => (
-                            <TimelineItem key={exp.role} exp={exp} index={i} isInView={isInView} />
+                            <TimelineItem key={exp.company} exp={exp} index={i} />
                         ))}
                     </div>
                 </div>

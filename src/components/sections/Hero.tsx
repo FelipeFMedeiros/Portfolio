@@ -1,192 +1,110 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import type { Variants } from 'framer-motion';
-import { Github, Download, ArrowRight, Linkedin } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import ResponsiveImage from '@/components/ui/ResponsiveImage';
+import { useState, useEffect } from 'react';
+import type { PointerEvent } from 'react';
+import { motion, useMotionValue, useSpring } from 'motion/react';
+import { usePrefersReducedMotion as useReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { Github, Download, ArrowUpRight, Linkedin, ArrowDown, Pause, Play } from 'lucide-react';
+import { SiReact, SiTypescript, SiNodedotjs } from 'react-icons/si';
+import Magnetic from '@/components/ui/Magnetic';
+import { usePointerEffects } from '@/hooks/usePointerEffects';
 
 const TECH_BADGES = ['React', 'Node.js', 'TypeScript', 'C#', 'React Native'];
+const SPECIALTIES = ['Full-Stack', 'React & TypeScript', 'Node.js & C#', 'React Native'];
 
-const containerVariants: Variants = {
-    hidden: {},
-    visible: {
-        transition: { staggerChildren: 0.12, delayChildren: 0.15 },
-    },
-};
-
-const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 28 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.6, ease: 'easeOut' },
-    },
-};
-
-const photoVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.85 },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: { duration: 0.7, ease: 'easeOut', delay: 0.3 },
-    },
-};
+function Typewriter({ paused }: { paused: boolean }) {
+    const [typing, setTyping] = useState({ word: 0, length: SPECIALTIES[0].length, deleting: false });
+    useEffect(() => {
+        if (paused) return;
+        const text = SPECIALTIES[typing.word];
+        const complete = typing.length === text.length;
+        const timer = window.setTimeout(() => {
+            setTyping((current) => {
+                if (!current.deleting && complete) return { ...current, deleting: true };
+                if (current.deleting && current.length === 0) return { word: (current.word + 1) % SPECIALTIES.length, length: 0, deleting: false };
+                return { ...current, length: current.length + (current.deleting ? -1 : 1) };
+            });
+        }, complete && !typing.deleting ? 2400 : typing.deleting ? 35 : 85);
+        return () => clearTimeout(timer);
+    }, [typing, paused]);
+    return <><span className="sr-only">Full-Stack, React, TypeScript, Node.js, C# e React Native</span>
+        <span aria-hidden="true">{SPECIALTIES[typing.word].slice(0, typing.length)}<span className="typing-caret">_</span></span></>;
+}
 
 export default function Hero() {
     const [imgError, setImgError] = useState(false);
-
-    const scrollToProjects = () => {
-        document.getElementById('projetos')?.scrollIntoView({ behavior: 'smooth' });
+    const [paused, setPaused] = useState(false);
+    const reducedMotion = useReducedMotion();
+    const pointerEffects = usePointerEffects();
+    const still = paused || !!reducedMotion;
+    const targetX = useMotionValue(0);
+    const targetY = useMotionValue(0);
+    const rotateX = useSpring(targetX, { stiffness: 150, damping: 20 });
+    const rotateY = useSpring(targetY, { stiffness: 150, damping: 20 });
+    const gridX = useSpring(0, { stiffness: 40, damping: 25 });
+    const gridY = useSpring(0, { stiffness: 40, damping: 25 });
+    const reset = () => { targetX.set(0); targetY.set(0); gridX.set(0); gridY.set(0); };
+    const move = (event: PointerEvent<HTMLElement>) => {
+        if (!pointerEffects || still) return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        targetX.set(y * -10); targetY.set(x * 12);
+        gridX.set(x * 14); gridY.set(y * 14);
     };
+    const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth' });
 
     return (
-        <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
-            <div className="absolute inset-0 hero-dot-grid opacity-40" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,oklch(0.76_0.15_207/0.08),transparent)]" />
-
-            <div className="relative z-10 w-full max-w-6xl mx-auto px-6 pt-24 pb-32 lg:pb-16 flex flex-col lg:flex-row items-center gap-10 xl:gap-16">
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="flex-1 min-w-0 flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-1"
-                >
-                    <motion.p variants={itemVariants} className="text-primary font-medium text-lg mb-2">
-                        Olá, eu sou 👋
-                    </motion.p>
-
-                    <motion.h1
-                        variants={itemVariants}
-                        className="text-5xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight leading-none mb-4"
-                    >
-                        <span className="text-gradient-cyan">Felipe</span>{' '}
-                        <span className="text-foreground">Medeiros</span>
-                    </motion.h1>
-
-                    <motion.p
-                        variants={itemVariants}
-                        className="text-xl sm:text-2xl text-muted-foreground font-medium mb-6"
-                    >
-                        Desenvolvedor <span className="text-foreground font-semibold">Full-Stack</span>
-                    </motion.p>
-
-                    <motion.p
-                        variants={itemVariants}
-                        className="text-muted-foreground leading-relaxed max-w-xl mb-8 text-base"
-                    >
-                        Estudante de Ciência da Computação na <span className="text-foreground font-medium">UERN</span>,
-                        apaixonado por construir soluções web e mobile modernas. Tenho experiência com sistemas de larga
-                        escala, integrações mobile e interfaces que encantam.
-                    </motion.p>
-
-                    <motion.div
-                        variants={itemVariants}
-                        className="flex flex-wrap justify-center lg:justify-start gap-2 mb-10"
-                    >
-                        {TECH_BADGES.map((tech) => (
-                            <span
-                                key={tech}
-                                className="px-2.5 py-1 text-xs font-medium rounded-md bg-secondary text-secondary-foreground border border-border"
-                            >
-                                {tech}
-                            </span>
-                        ))}
-                    </motion.div>
-
-                    <motion.div
-                        variants={itemVariants}
-                        className="flex flex-wrap justify-center lg:justify-start gap-3 mb-8"
-                    >
-                        <Button size="lg" onClick={scrollToProjects} className="gap-2 font-semibold cursor-pointer">
-                            Ver Projetos
-                            <ArrowRight size={16} />
-                        </Button>
-                        <Button
-                            size="lg"
-                            variant="outline"
-                            asChild
-                            className="gap-2 font-semibold hover:text-white hover:border-white"
-                        >
-                            <a href="/CV_FullStack_FelipeMedeiros.pdf" download="CV_FullStack_FelipeMedeiros.pdf">
-                                <Download size={16} />
-                                Download CV
-                            </a>
-                        </Button>
-                    </motion.div>
-
-                    <motion.div variants={itemVariants} className="flex justify-center lg:justify-start gap-3">
-                        <a
-                            href="https://github.com/FelipeFMedeiros"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-secondary/50 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 text-sm font-medium"
-                        >
-                            <Github size={17} />
-                            GitHub
-                        </a>
-                        <a
-                            href="https://www.linkedin.com/in/felipe-fmedeiros/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-secondary/50 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 text-sm font-medium"
-                        >
-                            <Linkedin size={17} />
-                            LinkedIn
-                        </a>
-                    </motion.div>
-                </motion.div>
-
-                <motion.div
-                    variants={photoVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="shrink-0 flex items-center justify-center order-1 lg:order-2"
-                >
-                    <div className="relative">
-                        <div className="absolute inset-0 rounded-full bg-primary/20 blur-2xl scale-110" />
-                        <div className="absolute inset-0 rounded-full border-2 border-primary/30 scale-[1.06]" />
-
-                        <div className="relative size-44 sm:size-56 lg:size-72 xl:size-80 rounded-full overflow-hidden border-2 border-primary/60 glow-cyan">
-                            {imgError ? (
-                                <div className="w-full h-full bg-linear-to-br from-primary/20 to-secondary flex items-center justify-center">
-                                    <span className="text-4xl lg:text-6xl font-bold text-primary select-none">FM</span>
-                                </div>
-                            ) : (
-                                <img
-                                    src="/profile.webp"
-                                    alt="Felipe Medeiros"
-                                    className="w-full h-full object-cover"
-                                    fetchPriority="high"
-                                    onError={() => setImgError(true)}
-                                />
-                            )}
-                        </div>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 1, duration: 0.5 }}
-                            className="hidden lg:block absolute -bottom-3 -right-4 bg-card border border-border rounded-xl px-3 py-2 shadow-xl"
-                        >
-                            <p className="text-xs text-muted-foreground">Experiência</p>
-                            <p className="text-sm font-bold text-foreground">+2 anos</p>
+        <section id="hero" className={`hero-section ${still ? 'is-paused' : ''}`} onPointerMove={move} onPointerLeave={reset}>
+            <motion.div aria-hidden="true" className="hero-grid" style={{ x: still ? 0 : gridX, y: still ? 0 : gridY }} />
+            <div aria-hidden="true" className="hero-ambient" />
+            <div className="content-shell hero-content">
+                <div className="hero-topline"><span>DESENVOLVEDOR FULL-STACK</span><span className="hidden sm:inline">WEB / MOBILE / SOFTWARE</span></div>
+                <div className="hero-main">
+                    <div className="hero-copy">
+                        <motion.p initial={{ opacity: 1 }} animate={{ opacity: 1 }} className="hero-greeting">Olá, eu sou <span>👋</span></motion.p>
+                        <h1 aria-label="Felipe Medeiros" className="hero-name">
+                            {['Felipe', 'Medeiros'].map((word, wordIndex) => <span key={word} aria-hidden="true" className="hero-word">
+                                {Array.from(word).map((character, index) => <motion.span key={index} className="inline-block"
+                                    initial={reducedMotion ? false : { y: '10%', opacity: 1, rotate: 2 }} animate={{ y: 0, opacity: 1, rotate: 0 }}
+                                    transition={{ duration: 0.75, delay: 0.12 + wordIndex * 0.16 + index * 0.045, ease: [0.22, 1, 0.36, 1] }}>{character}</motion.span>)}
+                                {wordIndex === 1 && <span className="hero-period">.</span>}
+                            </span>)}
+                        </h1>
+                        <motion.div initial={{ opacity: 1, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.6 }}>
+                            <p className="hero-specialty">Desenvolvedor <strong><Typewriter paused={still} /></strong></p>
+                            <p className="hero-description">Estudante de Ciência da Computação na <span>UERN</span>, apaixonado por construir soluções web e mobile modernas. Tenho experiência com sistemas de larga escala, integrações mobile e interfaces que encantam.</p>
+                            <div className="hero-tech">{TECH_BADGES.map((tech) => <span key={tech}>{tech}</span>)}</div>
+                            <div className="hero-actions flex flex-wrap gap-3">
+                                <Magnetic><button className="action-primary" onClick={() => scrollTo('projetos')}>Ver Projetos <ArrowUpRight size={18} /></button></Magnetic>
+                                <Magnetic><a className="action-secondary" href="/CV_Felipe_Medeiros_FullStack.pdf" download="CV_Felipe_Medeiros_FullStack.pdf"><Download size={16} />Download CV</a></Magnetic>
+                            </div>
+                            <div className="hero-socials">
+                                <a href="https://github.com/FelipeFMedeiros" target="_blank" rel="noopener noreferrer"><Github size={16} />GitHub<ArrowUpRight size={12} /></a>
+                                <a href="https://www.linkedin.com/in/felipe-fmedeiros/" target="_blank" rel="noopener noreferrer"><Linkedin size={16} />LinkedIn<ArrowUpRight size={12} /></a>
+                            </div>
                         </motion.div>
                     </div>
-                </motion.div>
+                    <motion.div className="hero-portrait-stage" initial={{ opacity: 1 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.35 }}>
+                        <motion.div className="hero-portrait-tilt" style={{ rotateX: pointerEffects && !still ? rotateX : 0, rotateY: pointerEffects && !still ? rotateY : 0, transformStyle: 'preserve-3d' }}>
+                            <span aria-hidden="true" className="portrait-cross cross-top">+</span><span aria-hidden="true" className="portrait-cross cross-bottom">+</span>
+                            <svg aria-hidden="true" viewBox="0 0 460 460" className="portrait-orbit orbit-one"><circle cx="230" cy="230" r="216" /><circle cx="230" cy="14" r="4" className="orbit-dot" /></svg>
+                            <svg aria-hidden="true" viewBox="0 0 460 460" className="portrait-orbit orbit-two"><ellipse cx="230" cy="230" rx="226" ry="163" /><circle cx="456" cy="230" r="3" className="orbit-dot" /></svg>
+                            <div className="portrait-photo-wrap">
+                                {imgError ? <div className="portrait-fallback">FM</div> : <ResponsiveImage sizes="(max-width: 767px) 60vw, (max-width: 1023px) 238px, 322px" src="/profile.webp" alt="Felipe Medeiros" width="400" height="400" fetchPriority="high" onError={() => setImgError(true)} />}
+                            </div>
+                            <div className="orbit-badge badge-react"><SiReact aria-hidden="true" size={21} /><span>React</span></div>
+                            <div className="orbit-badge badge-node"><SiNodedotjs aria-hidden="true" size={20} /><span>Node.js</span></div>
+                            <div className="orbit-badge badge-ts"><SiTypescript aria-hidden="true" size={18} /><span>TypeScript</span></div>
+                            <div className="portrait-caption"><span className="status-dot" /><div><span>Experiência</span><strong>+2 anos</strong></div><span aria-hidden="true" className="portrait-code">&lt;/&gt;</span></div>
+                        </motion.div>
+                    </motion.div>
+                </div>
+                <div className="hero-bottomline">
+                    <button onClick={() => scrollTo('projetos')} className="hero-scroll"><span className="scroll-arrow"><ArrowDown size={15} /></span>Role para baixo</button>
+                    <span className="hidden sm:block font-mono text-[10px] tracking-widest text-muted-foreground">CÓDIGO COM PROPÓSITO.</span>
+                    {!reducedMotion && <button onClick={() => { setPaused(!paused); reset(); }} className="animation-toggle" aria-label={paused ? 'Retomar animações' : 'Pausar animações'} title={paused ? 'Retomar animações' : 'Pausar animações'}>{paused ? <Play size={14} /> : <Pause size={14} />}</button>}
+                </div>
             </div>
-
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5, duration: 0.5 }}
-                className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-1.5"
-            >
-                <span className="text-xs text-muted-foreground">Role para baixo</span>
-                <motion.div
-                    animate={{ y: [0, 6, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-                    className="size-5 border-b-2 border-r-2 border-primary/60 rotate-45"
-                />
-            </motion.div>
         </section>
     );
 }

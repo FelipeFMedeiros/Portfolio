@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 bundle-analysis.html
+.reports/
+.prerender/
+public/generated/
