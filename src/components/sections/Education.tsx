@@ -30,9 +30,20 @@ interface Certificate {
     date: string;
     credentialUrl?: string;
     imageUrl?: string;
+    description?: string;
+    eventUrl?: string;
 }
 
 const CERTIFICATES: Certificate[] = [
+    {
+        title: 'Hackathon do Sol 2026',
+        issuer: 'Komune LTDA',
+        date: '26–28 Jun 2026 · Natal, RN',
+        description: '60 horas de participação em uma maratona de programação e inovação.',
+        credentialUrl: '/certs/hackathon-do-sol-2026.pdf',
+        imageUrl: '/certs/hackathon-do-sol-2026.webp',
+        eventUrl: 'https://hackathondosol.com.br/',
+    },
     {
         title: 'NLW Operator - Fullstack',
         issuer: 'Rocketseat',
@@ -243,7 +254,7 @@ export default function Education() {
                             <InteractiveSurface
                                 key={cert.title}
                                 tilt
-                                className="certificate-card group"
+                                className={`certificate-card group${cert.eventUrl ? ' certificate-card-event' : ''}`}
                             >
                                 {/* Visual header */}
                                 <div className="certificate-image">
@@ -274,18 +285,27 @@ export default function Education() {
                                     </h4>
                                     <p className="text-xs text-primary font-medium mt-0.5">{cert.issuer}</p>
                                     <p className="text-xs text-muted-foreground">{cert.date}</p>
+                                    {cert.description && <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{cert.description}</p>}
 
+                                    <div className="mt-auto pt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
                                     {cert.credentialUrl && (
                                         <a
                                             href={cert.credentialUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mt-auto pt-3 flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors duration-200 w-fit"
+                                            className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors duration-200 w-fit"
                                         >
                                             <ExternalLink size={12} />
                                             Ver Certificado
                                         </a>
                                     )}
+                                    {cert.eventUrl && (
+                                        <a href={cert.eventUrl} target="_blank" rel="noopener noreferrer"
+                                            className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors duration-200">
+                                            Sobre o evento <ExternalLink size={12} />
+                                        </a>
+                                    )}
+                                    </div>
                                 </div>
                             </InteractiveSurface>
                         ))}

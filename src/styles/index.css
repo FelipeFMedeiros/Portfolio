@@ -395,6 +395,9 @@
 .discipline-chips > span { border-radius: 5px; padding: 8px 11px; font-size: 10px; background: color-mix(in srgb, var(--background) 60%, transparent); }
 .certificate-carousel { display: flex; gap: 20px; overflow-x: auto; padding: 16px 3px 20px; margin: -16px -3px -20px; scroll-snap-type: x mandatory; }
 .certificate-card { flex: 0 0 320px; scroll-snap-align: start; }
+.certificate-card-event { border-color: color-mix(in srgb, #d6a32a 55%, var(--border)); }
+.certificate-card-event .certificate-image { background: #faf8ed; }
+.certificate-card-event .certificate-image img { object-fit: contain; }
 .certificate-card .surface-content { display: flex; flex-direction: column; overflow: hidden; border-radius: inherit; }
 .certificate-image { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--secondary); }
 .certificate-image > button { width: 100%; height: 100%; cursor: zoom-in; }
